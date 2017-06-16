@@ -60,6 +60,10 @@
       <Project>{EE2CAA6F-67CE-418E-9891-F9BD45774E7B}</Project>
       <Name>PetPolicyLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PetPolicyObjectSchema\PetPolicyObjectSchema.csproj">
+      <Project>{874B61EE-1819-4A87-98CC-5192B710F412}</Project>
+      <Name>PetPolicyObjectSchema</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

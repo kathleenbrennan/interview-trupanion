@@ -2,6 +2,7 @@
 using System;
 using NUnit.Framework;
 using PetPolicyLibrary;
+using PetPolicyObjectSchema;
 
 namespace PetPolicyUnitTests
 {
@@ -60,10 +61,6 @@ namespace PetPolicyUnitTests
 
         }
 
-        private static void ThenPolicyNumberIsThirteenCharactersLong()
-        {
-            Assert.Inconclusive();
-        }
         #endregion
 
         #region Givens
@@ -116,6 +113,12 @@ namespace PetPolicyUnitTests
         private static void ThenPolicyNumberContainsCountryCode(string countryCode)
         {
             Assert.That(_petPolicy.PolicyNumber, Does.Contain(countryCode));
+        }
+
+
+        private static void ThenPolicyNumberIsThirteenCharactersLong()
+        {
+            Assert.That(_petPolicy.PolicyNumber.Length == 13);
         }
         #endregion
 

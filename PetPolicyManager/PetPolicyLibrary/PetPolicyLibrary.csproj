@@ -44,5 +44,15 @@
     <Compile Include="PetPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PetPolicyDataProvider\PetPolicyDataProvider.csproj">
+      <Project>{94ef57da-c1c6-44ee-90ea-7a4cda1ea835}</Project>
+      <Name>PetPolicyDataProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PetPolicyObjectSchema\PetPolicyObjectSchema.csproj">
+      <Project>{874b61ee-1819-4a87-98cc-5192b710f412}</Project>
+      <Name>PetPolicyObjectSchema</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

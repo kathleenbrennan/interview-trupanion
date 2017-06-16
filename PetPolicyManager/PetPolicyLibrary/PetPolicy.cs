@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PetPolicyObjectSchema;
+using PetPolicyDataProvider;
 
 namespace PetPolicyLibrary
 {
@@ -21,21 +23,34 @@ namespace PetPolicyLibrary
         }
     }
 
-    public interface IPetPolicy
-    {
-        string PolicyNumber { get; set; }
-    }
-
     public class PetPolicy : IPetPolicy
     {
         public string PolicyNumber { get; set; }
 
-        private PetPolicy() { }
+        private PetPolicy() {
+            //hide constructor so unable to create without initialization 
+        }
+
+        private readonly IPetPolicyDataProvider _provider = PetPolicyDataProviderFactory.GetProvider(useDatabase: false);
 
         //enhancement: make so you have to call this from the factory method
         public PetPolicy(string countryCode)
         {
-            PolicyNumber = countryCode;
+
+            var dto = new PetPolicyDto();
+            try
+            {
+                dto.PolicyNumberAlphaPortion = countryCode;
+                dto.PolicyNumberNumericPortion = _provider.GeneratePolicyNumberIncrement();
+            }
+            catch (Exception ex)
+            {
+                //todo: Exception handling
+                throw (ex);
+            }
+
+            PolicyNumber = string.Concat(dto.PolicyNumberAlphaPortion, dto.PolicyNumberNumericPortion);
+
         }
     }
 }

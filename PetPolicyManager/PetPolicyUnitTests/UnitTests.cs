@@ -9,14 +9,13 @@ namespace PetPolicyUnitTests
     public class UnitTests
     {
         private static string _countryCode;
-        private static PetPolicy _petPolicy;
+        private static IPetPolicy _petPolicy;
 
         #region Tests
         [Test]
         public static void CanCreateNewPolicyWithCountryCode()
         {
-            string countryCode = "USA";
-            GivenACountryCode(countryCode);
+            GivenACountryCode("USA");
             WhenEnrollingAPolicy();
             ThenPolicyExists();
         }
@@ -45,7 +44,7 @@ namespace PetPolicyUnitTests
         [Test]
         public static void PolicyContainsCountryCode()
         {
-            string countryCode = "USA";
+            var countryCode = "USA";
             GivenACountryCode(countryCode);
             WhenEnrollingAPolicy();
             ThenPolicyNumberContainsCountryCode(countryCode);
@@ -54,7 +53,7 @@ namespace PetPolicyUnitTests
         [Test]
         public static void PolicyNumberIsThirteenCharactersLong()
         {
-            string countryCode = "USA";
+            var countryCode = "USA";
             GivenACountryCode(countryCode);
             WhenEnrollingAPolicy();
             ThenPolicyNumberIsThirteenCharactersLong();
@@ -76,7 +75,7 @@ namespace PetPolicyUnitTests
 
         private static void GivenAnEmptyCountryCode()
         {
-            _countryCode = String.Empty;
+            _countryCode = string.Empty;
         }
 
         private static void GivenATooShortCountryCode()
@@ -95,8 +94,6 @@ namespace PetPolicyUnitTests
 
         private static void WhenEnrollingAPolicy()
         {
-            //_petPolicy = new PetPolicy(_countryCode);
-            //todo: Factory method so can only create with country code
             _petPolicy = PetPolicyFactory.Enroll(_countryCode);
 
         }

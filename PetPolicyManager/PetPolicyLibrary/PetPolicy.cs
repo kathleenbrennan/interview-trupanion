@@ -10,31 +10,32 @@ namespace PetPolicyLibrary
     public static class PetPolicyFactory
     {
 
-        public static PetPolicy Enroll(string countryCode)
+        public static IPetPolicy Enroll(string countryCode)
         {
-            if(String.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3 )
+            if(string.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3 )
             {
                 throw new UnableToCreatePolicyException("A three-letter country code is required to enroll a policy");
             }
             return new PetPolicy(countryCode);
 
         }
-
     }
 
-
-    public class PetPolicy
+    public interface IPetPolicy
     {
-        private string _policyNumber = String.Empty;
+        string PolicyNumber { get; set; }
+    }
 
-        public string PolicyNumber { get => _policyNumber; set => _policyNumber = value; }
+    public class PetPolicy : IPetPolicy
+    {
+        public string PolicyNumber { get; set; }
 
-        protected PetPolicy() { }
+        private PetPolicy() { }
 
-        //todo: make so you have to call this from the factory method
+        //enhancement: make so you have to call this from the factory method
         public PetPolicy(string countryCode)
         {
-            _policyNumber = countryCode;
+            PolicyNumber = countryCode;
         }
     }
 }

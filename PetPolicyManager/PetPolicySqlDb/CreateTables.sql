@@ -76,27 +76,35 @@ go
 
 CREATE PROCEDURE [dbo].[EnrollPolicy]
 	@petOwnerId int,
-	@countryIso3LetterCode char(3)
+	@countryIso3LetterCode char(3),
+	@policyNumber nvarchar(100) = NULL OUTPUT
 AS
-	DECLARE @countryId int
-	-- todo: check existence and throw if not found
-	SELECT @countryId = CountryId 
-	FROM dbo.Country 
-	WHERE CountryIso3LetterCode = @countryIso3LetterCode
+BEGIN
+	SET NOCOUNT ON
+
+		DECLARE @countryId int
+
+		SET @policyNumber = CONCAT(@countryIso3LetterCode, '1234567890')
+
+		-- todo: check existence and throw if not found
+		SELECT @countryId = CountryId 
+		FROM dbo.Country 
+		WHERE CountryIso3LetterCode = @countryIso3LetterCode
 
 
-	INSERT INTO dbo.Policy
-	(
-		PolicyNumber
-		, PolicyEnrollmentDate
-		, CountryId
-		, PetOwnerId
-	)
-	VALUES
-	(
-		CONCAT(@countryIso3LetterCode, '1234567890')
-		, getdate()
-		, @countryId
-		, @petOwnerId
-	)
-RETURN 0
+		INSERT INTO dbo.Policy
+		(
+			PolicyNumber
+			, PolicyEnrollmentDate
+			, CountryId
+			, PetOwnerId
+		)
+		VALUES
+		(
+			@policyNumber
+			, getdate()
+			, @countryId
+			, @petOwnerId
+		)
+	RETURN 0
+END

@@ -40,7 +40,16 @@ namespace PetPolicyDataProvider
                 cmd.Parameters["@petOwnerId"].Value = ownerId;
                 cmd.Parameters["@countryIso3LetterCode"].Value = countryCode;
 
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    //todo: update the sproc so that we can catch the error here and raise it to the client
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
 
                 var policyNumber = cmd.Parameters["@policyNumber"].Value.ToString();
                 return policyNumber;

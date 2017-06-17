@@ -8,7 +8,7 @@ namespace PetPolicyIntegrationTests
     public class PetPolicyIntegrationTests
     {
         private static string _countryCode;
-        private static int? _ownerId;
+        private static int? _ownerId = 1; //default unless specified otherwise
         private static IPetPolicy _petPolicy;
 
         #region Tests
@@ -19,6 +19,13 @@ namespace PetPolicyIntegrationTests
             GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
             ThenPolicyExists();
+        }
+
+        [Test]
+        public static void CreatingPolicyWithNotFoundCountryCodeThrowsException()
+        {
+            GivenANotFoundCountryCode();
+            ThenCreatingPolicyIsNotPossible();
         }
         #endregion
 
@@ -31,6 +38,11 @@ namespace PetPolicyIntegrationTests
         private static void GivenAnOwnerId(int ownerId)
         {
             _ownerId = ownerId;
+        }
+
+        private static void GivenANotFoundCountryCode()
+        {
+            _countryCode = "XYZ";
         }
         #endregion
 
@@ -48,6 +60,11 @@ namespace PetPolicyIntegrationTests
         private static void ThenPolicyExists()
         {
             Assert.That(_petPolicy, Is.Not.Null);
+        }
+
+        private static void ThenCreatingPolicyIsNotPossible()
+        {
+            Assert.That(() => WhenEnrollingAPolicy(), Throws.Exception);
         }
         #endregion
 

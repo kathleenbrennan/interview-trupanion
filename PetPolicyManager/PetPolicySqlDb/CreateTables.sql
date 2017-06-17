@@ -83,28 +83,42 @@ BEGIN
 	SET NOCOUNT ON
 
 		DECLARE @countryId int
+		DECLARE @rowCount int
+		DECLARE @errorMessage nvarchar(250)
 
-		SET @policyNumber = CONCAT(@countryIso3LetterCode, '1234567890')
 
 		-- todo: check existence and throw if not found
 		SELECT @countryId = CountryId 
 		FROM dbo.Country 
 		WHERE CountryIso3LetterCode = @countryIso3LetterCode
+		SELECT @rowCount = @@ROWCOUNT
+		-- TODO: check if this error is being reached
+		IF @rowCount = 1
+			BEGIN
 
+				SET @policyNumber = CONCAT(@countryIso3LetterCode, '1234567890')
+				INSERT INTO dbo.Policy
+				(
+					PolicyNumber
+					, PolicyEnrollmentDate
+					, CountryId
+					, PetOwnerId
+				)
+				VALUES
+				(
+					@policyNumber
+					, getdate()
+					, @countryId
+					, @petOwnerId
+				)
 
-		INSERT INTO dbo.Policy
-		(
-			PolicyNumber
-			, PolicyEnrollmentDate
-			, CountryId
-			, PetOwnerId
-		)
-		VALUES
-		(
-			@policyNumber
-			, getdate()
-			, @countryId
-			, @petOwnerId
-		)
-	RETURN 0
+				RETURN 0
+				END;
+		ELSE
+			BEGIN
+				SET @errorMessage = 'Country Id ' + CONVERT(nchar(3), @countryId) + ' not found.'
+				RAISERROR(@errorMessage, 11, -1, 'EnrollPolicy')
+				RETURN 99
+			END;
+		
 END

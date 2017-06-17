@@ -8,6 +8,7 @@ namespace PetPolicyIntegrationTests
     public class PetPolicyIntegrationTests
     {
         private static string _countryCode;
+        private static int? _ownerId;
         private static IPetPolicy _petPolicy;
 
         #region Tests
@@ -15,6 +16,7 @@ namespace PetPolicyIntegrationTests
         public static void CanCreateNewPolicyWithCountryCode()
         {
             GivenACountryCode("USA");
+            GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
             ThenPolicyExists();
         }
@@ -25,13 +27,18 @@ namespace PetPolicyIntegrationTests
         {
             _countryCode = countryCode;
         }
+
+        private static void GivenAnOwnerId(int ownerId)
+        {
+            _ownerId = ownerId;
+        }
         #endregion
 
         #region Whens
 
         private static void WhenEnrollingAPolicy()
         {
-            _petPolicy = PetPolicyFactory.Enroll(_countryCode);
+            _petPolicy = PetPolicyFactory.Enroll(_countryCode, _ownerId);
 
         }
         #endregion

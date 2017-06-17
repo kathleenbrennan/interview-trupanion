@@ -10,13 +10,15 @@ namespace PetPolicyUnitTests
     public class UnitTests
     {
         private static string _countryCode;
+        private static int? _ownerId = 1; //default if not set explicitly
         private static IPetPolicy _petPolicy;
 
         #region Tests
         [Test]
-        public static void CanCreateNewPolicyWithCountryCode()
+        public static void CanCreateNewPolicyWithCountryCodeAndOwnerId()
         {
             GivenACountryCode("USA");
+            GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
             ThenPolicyExists();
         }
@@ -27,6 +29,16 @@ namespace PetPolicyUnitTests
             GivenAnEmptyCountryCode();
             ThenCreatingPolicyIsNotPossible();
         }
+
+
+        [Test]
+        public static void CreatingPolicyWithNullOwnerIdThrowsException()
+        {
+            GivenANullOwnerId();
+            ThenCreatingPolicyIsNotPossible();
+        }
+
+
 
         [Test]
         public static void CreatingPolicyWithTooShortCountryCodeThrowsException()
@@ -47,6 +59,7 @@ namespace PetPolicyUnitTests
         {
             var countryCode = "USA";
             GivenACountryCode(countryCode);
+            GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
             ThenPolicyNumberContainsCountryCode(countryCode);
         }
@@ -56,6 +69,7 @@ namespace PetPolicyUnitTests
         {
             var countryCode = "USA";
             GivenACountryCode(countryCode);
+            GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
             ThenPolicyNumberIsThirteenCharactersLong();
 
@@ -69,6 +83,15 @@ namespace PetPolicyUnitTests
             _countryCode = countryCode;
         }
 
+        private static void GivenAnOwnerId(int ownerId)
+        {
+            _ownerId = ownerId;
+        }
+
+        private static void GivenANullOwnerId()
+        {
+            _ownerId = null;
+        }
 
         private static void GivenAnEmptyCountryCode()
         {
@@ -91,7 +114,7 @@ namespace PetPolicyUnitTests
 
         private static void WhenEnrollingAPolicy()
         {
-            _petPolicy = PetPolicyFactory.Enroll(_countryCode);
+            _petPolicy = PetPolicyFactory.Enroll(_countryCode, _ownerId);
 
         }
         #endregion

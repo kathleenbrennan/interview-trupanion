@@ -4,7 +4,7 @@ namespace PetPolicyDataProvider
 {
     public interface IPetPolicyDataProvider
     {
-        string GeneratePolicyNumber(string countryCode);
+        string GeneratePolicyNumber(string countryCode, int ownerId);
     }
 
 

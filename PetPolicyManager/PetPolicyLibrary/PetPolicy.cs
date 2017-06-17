@@ -13,13 +13,17 @@ namespace PetPolicyLibrary
     public static class PetPolicyFactory
     {
 
-        public static IPetPolicy Enroll(string countryCode)
+        public static IPetPolicy Enroll(string countryCode, int? ownerId)
         {
             if(string.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3 )
             {
-                throw new UnableToCreatePolicyException("A three-letter country code is required to enroll a policy");
+                throw new UnableToCreatePolicyException("A three-letter country code is required to enroll a policy.");
             }
-            return new PetPolicy(countryCode);
+            if (!ownerId.HasValue)
+            {
+                throw new UnableToCreatePolicyException("A non-null owner ID is required to enroll a policy.");
+            }
+            return new PetPolicy(countryCode, ownerId.Value);
 
         }
     }
@@ -36,23 +40,24 @@ namespace PetPolicyLibrary
 
         //todo: use dependency injection to determine 
         //  whether or not to use database
-        //protected readonly IPetPolicyDataProvider _provider;
 
         //enhancement: make so you have to call this from the factory method
-        public PetPolicy(string countryCode)
+        public PetPolicy(string countryCode, int ownerId)
         {
             var useDatabaseConfigSetting =
                 System.Configuration.ConfigurationManager.AppSettings["useDatabase"];
 
-            //todo: tryParse
-            bool useDatabase = Boolean.Parse(useDatabaseConfigSetting);
+            bool result;
+            var useDatabase = 
+                Boolean.TryParse(useDatabaseConfigSetting, out result) 
+                    && result;
 
             IPetPolicyDataProvider provider =
                 PetPolicyDataProviderFactory.GetProvider(useDatabase: useDatabase);
             var dto = new PetPolicyDto();
             try
             {
-                dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode);
+                dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
             }
             catch (Exception ex)
             {

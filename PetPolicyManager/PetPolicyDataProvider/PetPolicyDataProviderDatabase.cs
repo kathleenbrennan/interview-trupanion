@@ -25,14 +25,9 @@ namespace PetPolicyDataProvider
             _sqlConnection?.Dispose();
         }
 
-        public override string GeneratePolicyNumber(string countryCode)
+        public override string GeneratePolicyNumber(string countryCode, int ownerId)
         {
-            //todo: replace owner with real data from the client
-            int petOwnerId = 1;
-
-            //throw new NotImplementedException();
-
-            using (SqlCommand cmd = new SqlCommand("dbo.EnrollPolicy", _sqlConnection))
+            using (var cmd = new SqlCommand("dbo.EnrollPolicy", _sqlConnection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -42,12 +37,12 @@ namespace PetPolicyDataProvider
                 cmd.Parameters.Add("@policyNumber", SqlDbType.NVarChar, 100).Direction = ParameterDirection.Output;
 
                 // set parameter values
-                cmd.Parameters["@petOwnerId"].Value = petOwnerId;
+                cmd.Parameters["@petOwnerId"].Value = ownerId;
                 cmd.Parameters["@countryIso3LetterCode"].Value = countryCode;
 
                 cmd.ExecuteNonQuery();
 
-                string policyNumber = cmd.Parameters["@policyNumber"].Value.ToString();
+                var policyNumber = cmd.Parameters["@policyNumber"].Value.ToString();
                 return policyNumber;
             }
 

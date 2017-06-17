@@ -18,13 +18,14 @@ create table PetOwner
 )
 go
 
-create table Policy
-(
-		PolicyId		int identity(1,1) PRIMARY KEY
-	,	PolicyNumber	varchar(40) NOT NULL
-	,	PolicyEnrollmentDate	datetime NOT NULL
-    , CountryId int NOT NULL
-	, PetOwnerId int NOT NULL
+
+CREATE TABLE [dbo].[Policy] (
+    [PolicyId]              INT          IDENTITY (1, 1) NOT NULL,
+    [PolicyNumberIncrement] INT    NOT NULL,
+    [PolicyNumber]          VARCHAR (40) NOT NULL,
+    [PolicyEnrollmentDate]  DATETIME     NOT NULL,
+    [CountryId]             INT          NOT NULL,
+    [PetOwnerId]            INT          NOT NULL
 	, CONSTRAINT [FK_Policy_ToCountry] 
 		FOREIGN KEY ([CountryId]) 
 		REFERENCES [dbo].[Country]([CountryId])
@@ -33,7 +34,11 @@ create table Policy
 		FOREIGN KEY ([PetOwnerId])
 		REFERENCES [PetOwner]([PetOwnerId])
 )
-go
+GO
+
+CREATE INDEX [IX_Policy_PolicyNumberIncrement] ON [dbo].[Policy] ([PolicyNumberIncrement])
+GO
+
 
 create table Pet
 (
@@ -80,23 +85,30 @@ BEGIN
 	SET NOCOUNT ON
 
 		DECLARE @countryId int
+		DECLARE @policyNumberIncrement int
+		DECLARE @policyNumberIncrementString varchar(10)
+		DECLARE @len int
+		DECLARE @fill varchar(10)
 		DECLARE @rowCount int
 		DECLARE @errorMessage nvarchar(250)
 
-
-		-- todo: check existence and throw if not found
 		SELECT @countryId = CountryId 
 		FROM dbo.Country 
 		WHERE CountryIso3LetterCode = @countryIso3LetterCode
 		SELECT @rowCount = @@ROWCOUNT
-		-- TODO: check if this error is being reached
 		IF @rowCount = 1
 			BEGIN
 
-				SET @policyNumber = CONCAT(@countryIso3LetterCode, '1234567890')
+				EXEC @policyNumberIncrement = fnGeneratePolicyNumber
+				SELECT @policyNumberIncrementString = CONVERT(varchar(10), @policyNumberIncrement)
+				SELECT @len=LEN(@policyNumberIncrementString)
+				SELECT @fill = REPLICATE('0', 10-@len)
+
+				SET @policyNumber = CONCAT(@countryIso3LetterCode, @fill, @policyNumberIncrement)
 				INSERT INTO dbo.Policy
 				(
 					PolicyNumber
+					, PolicyNumberIncrement
 					, PolicyEnrollmentDate
 					, CountryId
 					, PetOwnerId
@@ -104,6 +116,7 @@ BEGIN
 				VALUES
 				(
 					@policyNumber
+					, @policyNumberIncrement					
 					, getdate()
 					, @countryId
 					, @petOwnerId
@@ -119,3 +132,8 @@ BEGIN
 			END;
 		
 END
+		
+
+GO
+
+

@@ -10,10 +10,7 @@ GO
 
 --DROP PROCEDURE [dbo].[EnrollPolicy];
 
-
 GO
-
-
 
 CREATE PROCEDURE [dbo].[EnrollPolicy]
 	@petOwnerId int,
@@ -24,23 +21,30 @@ BEGIN
 	SET NOCOUNT ON
 
 		DECLARE @countryId int
+		DECLARE @policyNumberIncrement int
+		DECLARE @policyNumberIncrementString varchar(10)
+		DECLARE @len int
+		DECLARE @fill varchar(10)
 		DECLARE @rowCount int
 		DECLARE @errorMessage nvarchar(250)
 
-
-		-- todo: check existence and throw if not found
 		SELECT @countryId = CountryId 
 		FROM dbo.Country 
 		WHERE CountryIso3LetterCode = @countryIso3LetterCode
 		SELECT @rowCount = @@ROWCOUNT
-		-- TODO: check if this error is being reached
 		IF @rowCount = 1
 			BEGIN
 
-				SET @policyNumber = CONCAT(@countryIso3LetterCode, '1234567890')
+				EXEC @policyNumberIncrement = fnGeneratePolicyNumber
+				SELECT @policyNumberIncrementString = CONVERT(varchar(10), @policyNumberIncrement)
+				SELECT @len=LEN(@policyNumberIncrementString)
+				SELECT @fill = REPLICATE('0', 10-@len)
+
+				SET @policyNumber = CONCAT(@countryIso3LetterCode, @fill, @policyNumberIncrement)
 				INSERT INTO dbo.Policy
 				(
 					PolicyNumber
+					, PolicyNumberIncrement
 					, PolicyEnrollmentDate
 					, CountryId
 					, PetOwnerId
@@ -48,6 +52,7 @@ BEGIN
 				VALUES
 				(
 					@policyNumber
+					, @policyNumberIncrement					
 					, getdate()
 					, @countryId
 					, @petOwnerId

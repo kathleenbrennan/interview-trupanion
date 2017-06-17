@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Country]
 (
-	[CountryId] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [CountryIso3LetterCode] NCHAR(3) NOT NULL, 
-    [CountryName] NVARCHAR(50) NOT NULL
+	[CountryId] int identity(1,1) PRIMARY KEY, 
+    [CountryIso3LetterCode] CHAR(3) NOT NULL, 
+    [CountryName] VARCHAR(50) NOT NULL
 )
 GO
 
@@ -12,11 +12,9 @@ create table PetOwner
 	,	PetOwnerName		nvarchar(200)
     , CountryId int NOT NULL
 	, 
-    /*
 	CONSTRAINT [FK_PetOwner_ToCountry] 
 		FOREIGN KEY ([CountryId]) 
-		REFERENCES [dbo.Country]([CountryId])
-	*/
+		REFERENCES [dbo].[Country]([CountryId])
 )
 go
 
@@ -27,11 +25,10 @@ create table Policy
 	,	PolicyEnrollmentDate	datetime NOT NULL
     , CountryId int NOT NULL
 	, PetOwnerId int NOT NULL
-	/*
 	, CONSTRAINT [FK_Policy_ToCountry] 
 		FOREIGN KEY ([CountryId]) 
-		REFERENCES [dbo.Country]([CountryId])
-	*/
+		REFERENCES [dbo].[Country]([CountryId])
+	
 	, CONSTRAINT [FK_Policy_toPetOwner] 
 		FOREIGN KEY ([PetOwnerId])
 		REFERENCES [PetOwner]([PetOwnerId])
@@ -77,7 +74,7 @@ go
 CREATE PROCEDURE [dbo].[EnrollPolicy]
 	@petOwnerId int,
 	@countryIso3LetterCode char(3),
-	@policyNumber nvarchar(100) = NULL OUTPUT
+	@policyNumber varchar(100) = NULL OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -116,7 +113,7 @@ BEGIN
 				END;
 		ELSE
 			BEGIN
-				SET @errorMessage = 'Country Id ' + CONVERT(nchar(3), @countryId) + ' not found.'
+				SET @errorMessage = 'Country Id ' + CONVERT(char(3), @countryId) + ' not found.'
 				RAISERROR(@errorMessage, 11, -1, 'EnrollPolicy')
 				RETURN 99
 			END;

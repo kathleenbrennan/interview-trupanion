@@ -18,7 +18,7 @@ GO
 CREATE PROCEDURE [dbo].[EnrollPolicy]
 	@petOwnerId int,
 	@countryIso3LetterCode char(3),
-	@policyNumber nvarchar(100) = NULL OUTPUT
+	@policyNumber varchar(100) = NULL OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -55,7 +55,7 @@ BEGIN
 				END;
 		ELSE
 			BEGIN
-				SET @errorMessage = 'Country Id ' + CONVERT(nchar(3), @countryId) + ' not found.'
+				SET @errorMessage = 'Country Id ' + CONVERT(char(3), @countryId) + ' not found.'
 				RAISERROR(@errorMessage, 11, -1, 'EnrollPolicy')
 				RETURN 99
 			END;

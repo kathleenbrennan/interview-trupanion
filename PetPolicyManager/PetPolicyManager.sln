@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetPolicyDataProvider", "Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetPolicyObjectSchema", "PetPolicyObjectSchema\PetPolicyObjectSchema.csproj", "{874B61EE-1819-4A87-98CC-5192B710F412}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PetPolicySqlDb", "PetPolicySqlDb\PetPolicySqlDb.sqlproj", "{722C006E-FE5A-4717-8BC9-162256032DCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetPolicyIntegrationTests", "PetPolicyIntegrationTests\PetPolicyIntegrationTests.csproj", "{04BB33B9-87C7-4A97-809F-E8873253CDA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,16 @@ Global
 		{874B61EE-1819-4A87-98CC-5192B710F412}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{874B61EE-1819-4A87-98CC-5192B710F412}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{874B61EE-1819-4A87-98CC-5192B710F412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{722C006E-FE5A-4717-8BC9-162256032DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{722C006E-FE5A-4717-8BC9-162256032DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{722C006E-FE5A-4717-8BC9-162256032DCB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{722C006E-FE5A-4717-8BC9-162256032DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{722C006E-FE5A-4717-8BC9-162256032DCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{722C006E-FE5A-4717-8BC9-162256032DCB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

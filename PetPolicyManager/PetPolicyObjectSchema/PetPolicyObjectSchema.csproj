@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE2CAA6F-67CE-418E-9891-F9BD45774E7B}</ProjectGuid>
+    <ProjectGuid>{874B61EE-1819-4A87-98CC-5192B710F412}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PetPolicyLibrary</RootNamespace>
-    <AssemblyName>PetPolicyLibrary</AssemblyName>
+    <RootNamespace>PetPolicyObjectSchema</RootNamespace>
+    <AssemblyName>PetPolicyObjectSchema</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,19 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions.cs" />
-    <Compile Include="PetPolicy.cs" />
+    <Compile Include="IPetPolicy.cs" />
+    <Compile Include="PetPolicyDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PetPolicyDataProvider\PetPolicyDataProvider.csproj">
-      <Project>{94ef57da-c1c6-44ee-90ea-7a4cda1ea835}</Project>
-      <Name>PetPolicyDataProvider</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PetPolicyObjectSchema\PetPolicyObjectSchema.csproj">
-      <Project>{874b61ee-1819-4a87-98cc-5192b710f412}</Project>
-      <Name>PetPolicyObjectSchema</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

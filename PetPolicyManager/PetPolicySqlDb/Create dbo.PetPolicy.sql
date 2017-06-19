@@ -1,12 +1,11 @@
 ﻿CREATE TABLE [dbo].[PetPolicy] (
-    [PetPolicyId]          INT      NOT NULL,
+	[PetPolicyId]          INT identity(1,1)      PRIMARY KEY,
     [PetId]                INT      NOT NULL,
     [PolicyId]             INT      NOT NULL,
     [AddToPolicyDate]      DATETIME NOT NULL,
     [RemoveFromPolicyDate] DATETIME NULL,
-    PRIMARY KEY CLUSTERED ([PetPolicyId] ASC),
     CONSTRAINT [FK_PetPolicy_ToPet] FOREIGN KEY ([PetId]) REFERENCES [dbo].[Pet] ([PetId]),
-    CONSTRAINT [FK_PetPolicy_ToPolicy] FOREIGN KEY ([PolicyId]) REFERENCES [dbo].[Policy] ([PolicyId])
+    CONSTRAINT [FK_PetPolicy_ToPolicy] FOREIGN KEY ([PolicyId]) REFERENCES [dbo].[Policy] ([PolicyId]) 
 );
 
 

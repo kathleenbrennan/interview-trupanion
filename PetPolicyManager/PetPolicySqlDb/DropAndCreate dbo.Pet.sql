@@ -15,13 +15,13 @@ GO
 create table Pet
 (
 		PetId		int identity(1,1) PRIMARY KEY
-	,	PetOwnerId	int
+	,	OwnerId	int
 	,	PetName		nvarchar(40)
 	,	PetDateOfBirth	date
 	, BreedId int, 
-    CONSTRAINT [FK_Pet_toPetOwner] 
-		FOREIGN KEY ([PetOwnerId])
-		REFERENCES [PetOwner]([PetOwnerId])
+    CONSTRAINT [FK_Pet_toOwner] 
+		FOREIGN KEY ([OwnerId])
+		REFERENCES [Owner]([OwnerId])
 	, CONSTRAINT [FK_Pet_toBreed] 
 		FOREIGN KEY ([BreedId])
 		REFERENCES [Breed]([BreedId])

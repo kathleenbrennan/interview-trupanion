@@ -32,12 +32,12 @@ namespace PetPolicyDataProvider
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 // set up the parameters
-                cmd.Parameters.Add("@petOwnerId", SqlDbType.Int);
+                cmd.Parameters.Add("@ownerId", SqlDbType.Int);
                 cmd.Parameters.Add("@countryIso3LetterCode", SqlDbType.Char, 3);
                 cmd.Parameters.Add("@policyNumber", SqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
 
                 // set parameter values
-                cmd.Parameters["@petOwnerId"].Value = ownerId;
+                cmd.Parameters["@ownerId"].Value = ownerId;
                 cmd.Parameters["@countryIso3LetterCode"].Value = countryCode;
 
                 try

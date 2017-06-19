@@ -12,7 +12,7 @@ GO
 GO
 
 CREATE PROCEDURE [dbo].[spPolicyInsert]
-	@petOwnerId int,
+	@ownerId int,
 	@countryIso3LetterCode char(3),
 	@policyNumber varchar(100) = NULL OUTPUT
 AS
@@ -47,7 +47,7 @@ BEGIN
 					, PolicyEnrollmentDate
 					, PolicyCancellationDate
 					, CountryId
-					, PetOwnerId
+					, OwnerId
 				)
 				VALUES
 				(
@@ -56,7 +56,7 @@ BEGIN
 					, getdate()
 					, null
 					, @countryId
-					, @petOwnerId
+					, @ownerId
 				)
 				END;
 		ELSE

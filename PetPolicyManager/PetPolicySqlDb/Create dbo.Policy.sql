@@ -14,9 +14,16 @@ CREATE TABLE [dbo].[Policy] (
     [PolicyNumberIncrement] INT          NOT NULL,
     [PolicyNumber]          VARCHAR (40) NOT NULL,
     [PolicyEnrollmentDate]  DATETIME     NOT NULL,
-    [CountryId]             INT          NOT NULL,    
-	[PolicyCancellationDate]  DATETIME     NOT NULL,
-    [PetOwnerId]            INT          NOT NULL
+	[PolicyCancellationDate]  DATETIME   ,    
+	[CountryId]             INT          NOT NULL,    
+    [OwnerId]            INT          NOT NULL
+	, CONSTRAINT [FK_Policy_ToCountry] 
+		FOREIGN KEY ([CountryId]) 
+		REFERENCES [dbo].[Country]([CountryId])
+	
+	, CONSTRAINT [FK_Policy_toOwner] 
+		FOREIGN KEY ([OwnerId])
+		REFERENCES [Owner]([OwnerId]) 
 );
 
 

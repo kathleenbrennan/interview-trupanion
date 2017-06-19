@@ -6,13 +6,13 @@
 )
 GO
 
-create table PetOwner
+create table Owner
 (
-		PetOwnerId		int identity(1,1) PRIMARY KEY
-	,	PetOwnerName		nvarchar(200)
+		OwnerId		int identity(1,1) PRIMARY KEY
+	,	OwnerName		nvarchar(200)
     , CountryId int NOT NULL
 	, 
-	CONSTRAINT [FK_PetOwner_ToCountry] 
+	CONSTRAINT [FK_Owner_ToCountry] 
 		FOREIGN KEY ([CountryId]) 
 		REFERENCES [dbo].[Country]([CountryId])
 )
@@ -26,14 +26,14 @@ CREATE TABLE [dbo].[Policy] (
     [PolicyEnrollmentDate]  DATETIME     NOT NULL,
     [PolicyCancellationDate]  DATETIME,
     [CountryId]             INT          NOT NULL,
-    [PetOwnerId]            INT          NOT NULL
+    [OwnerId]            INT          NOT NULL
 	, CONSTRAINT [FK_Policy_ToCountry] 
 		FOREIGN KEY ([CountryId]) 
 		REFERENCES [dbo].[Country]([CountryId])
 	
-	, CONSTRAINT [FK_Policy_toPetOwner] 
-		FOREIGN KEY ([PetOwnerId])
-		REFERENCES [PetOwner]([PetOwnerId]) 
+	, CONSTRAINT [FK_Policy_toOwner] 
+		FOREIGN KEY ([OwnerId])
+		REFERENCES [Owner]([OwnerId]) 
 )
 GO
 
@@ -52,13 +52,13 @@ GO
 create table Pet
 (
 		PetId		int identity(1,1) PRIMARY KEY
-	,	PetOwnerId	int
+	,	OwnerId	int
 	,	PetName		nvarchar(40)
 	,	PetDateOfBirth	date
 	, BreedId int, 
-    CONSTRAINT [FK_Pet_toPetOwner] 
-		FOREIGN KEY ([PetOwnerId])
-		REFERENCES [PetOwner]([PetOwnerId])
+    CONSTRAINT [FK_Pet_toOwner] 
+		FOREIGN KEY ([OwnerId])
+		REFERENCES [Owner]([OwnerId])
 	, CONSTRAINT [FK_Pet_toBreed] 
 		FOREIGN KEY ([BreedId])
 		REFERENCES [Breed]([BreedId])
@@ -86,7 +86,7 @@ go
 
 
 CREATE PROCEDURE [dbo].[spPolicyInsert]
-	@petOwnerId int,
+	@ownerId int,
 	@countryIso3LetterCode char(3),
 	@policyNumber varchar(100) = NULL OUTPUT
 AS
@@ -120,7 +120,7 @@ BEGIN
 					, PolicyNumberIncrement
 					, PolicyEnrollmentDate
 					, CountryId
-					, PetOwnerId
+					, OwnerId
 				)
 				VALUES
 				(
@@ -128,7 +128,7 @@ BEGIN
 					, @policyNumberIncrement					
 					, getdate()
 					, @countryId
-					, @petOwnerId
+					, @ownerId
 				)
 
 				RETURN 0

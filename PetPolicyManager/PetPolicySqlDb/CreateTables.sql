@@ -24,7 +24,7 @@ CREATE TABLE [dbo].[Policy] (
     [PolicyNumberIncrement] INT    NOT NULL,
     [PolicyNumber]          VARCHAR (40) NOT NULL,
     [PolicyEnrollmentDate]  DATETIME     NOT NULL,
-    [PolicyCancellationDate]  DATETIME     NOT NULL,
+    [PolicyCancellationDate]  DATETIME,
     [CountryId]             INT          NOT NULL,
     [PetOwnerId]            INT          NOT NULL
 	, CONSTRAINT [FK_Policy_ToCountry] 
@@ -33,20 +33,21 @@ CREATE TABLE [dbo].[Policy] (
 	
 	, CONSTRAINT [FK_Policy_toPetOwner] 
 		FOREIGN KEY ([PetOwnerId])
-		REFERENCES [PetOwner]([PetOwnerId]), 
-    CONSTRAINT [PK_Policy] PRIMARY KEY ([PolicyId])
+		REFERENCES [PetOwner]([PetOwnerId]) 
 )
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Policy_PolicyNumberIncrement] ON [dbo].[Policy] ([PolicyNumberIncrement])
+CREATE NONCLUSTERED INDEX [IX_Policy_PolicyEnrollmentDate]
+    ON [dbo].[Policy]([PolicyEnrollmentDate] ASC);
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Policy_PolicyEnrollmentDate] ON [dbo].[Policy] ([PolicyEnrollmentDate])
+CREATE NONCLUSTERED INDEX [IX_Policy_PolicyCancellationDate] 
+ON [dbo].[Policy] ([PolicyCancellationDate])
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Policy_PolicyCancellationDate] ON [dbo].[Policy] ([PolicyCancellationDate])
+CREATE NONCLUSTERED INDEX [IX_Policy_PolicyNumberIncrement]
+    ON [dbo].[Policy]([PolicyNumberIncrement] ASC);
 GO
-
 
 create table Pet
 (
@@ -62,6 +63,7 @@ create table Pet
 		FOREIGN KEY ([BreedId])
 		REFERENCES [Breed]([BreedId])
 )
+GO
 
 create table Breed
 (
@@ -83,7 +85,7 @@ go
 
 
 
-CREATE PROCEDURE [dbo].[EnrollPolicy]
+CREATE PROCEDURE [dbo].[spPolicyInsert]
 	@petOwnerId int,
 	@countryIso3LetterCode char(3),
 	@policyNumber varchar(100) = NULL OUTPUT

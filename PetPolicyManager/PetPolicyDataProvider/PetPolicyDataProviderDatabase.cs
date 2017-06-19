@@ -27,7 +27,7 @@ namespace PetPolicyDataProvider
 
         public override string GeneratePolicyNumber(string countryCode, int ownerId)
         {
-            using (var cmd = new SqlCommand("dbo.EnrollPolicy", _sqlConnection))
+            using (var cmd = new SqlCommand("dbo.spPolicyInsert", _sqlConnection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
 

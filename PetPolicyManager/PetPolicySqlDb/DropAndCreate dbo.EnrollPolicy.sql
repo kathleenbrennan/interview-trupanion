@@ -1,18 +1,17 @@
 ﻿USE [PetPolicySqlDb]
 GO
 
-/****** Object: SqlProcedure [dbo].[EnrollPolicy] Script Date: 6/16/2017 9:09:06 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
---DROP PROCEDURE [dbo].[EnrollPolicy];
+--DROP PROCEDURE [dbo].[spPolicyInsert];
 
 GO
 
-CREATE PROCEDURE [dbo].[EnrollPolicy]
+CREATE PROCEDURE [dbo].[spPolicyInsert]
 	@petOwnerId int,
 	@countryIso3LetterCode char(3),
 	@policyNumber varchar(100) = NULL OUTPUT
@@ -46,6 +45,7 @@ BEGIN
 					PolicyNumber
 					, PolicyNumberIncrement
 					, PolicyEnrollmentDate
+					, PolicyCancellationDate
 					, CountryId
 					, PetOwnerId
 				)
@@ -54,6 +54,7 @@ BEGIN
 					@policyNumber
 					, @policyNumberIncrement					
 					, getdate()
+					, null
 					, @countryId
 					, @petOwnerId
 				)

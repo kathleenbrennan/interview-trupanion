@@ -55,5 +55,10 @@ namespace PetPolicyDataProvider
             }
 
         }
+
+        public override PetOwnerDto RegisterOwner(string countryCode, string ownerName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

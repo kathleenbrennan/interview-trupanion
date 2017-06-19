@@ -9,5 +9,16 @@ namespace PetPolicyDataProvider
         {
             return countryCode + "1234567890";
         }
+
+        public override PetOwnerDto RegisterOwner(string countryCode, string ownerName)
+        {
+            return new PetOwnerDto
+            {
+                CountryId = 3,
+                OwnerId = 3,
+                OwnerName = ownerName
+            };
+
+        }
     }
 }

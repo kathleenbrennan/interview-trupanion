@@ -7,11 +7,13 @@ using PetPolicyObjectSchema;
 namespace PetPolicyUnitTests
 {
     [TestFixture]
-    public class UnitTests
+    public class PolicyTests
     {
         private static string _countryCode;
         private static int? _ownerId = 1; //default if not set explicitly
         private static IPetPolicy _petPolicy;
+        private static string _ownerName;
+        private static Owner _owner;
 
         #region Tests
         [Test]
@@ -75,6 +77,21 @@ namespace PetPolicyUnitTests
 
         }
 
+        [Test]
+        public static void CanCreateAnOwner()
+        {
+            var countryCode = "USA";
+            GivenACountryCode(countryCode);
+            var ownerName = "Larry Brennan";
+            GivenAnOwnerName(ownerName);
+            WhenAddingAnOwner();
+            ThenOwnerHasCountryId();
+            ThenOwnerHasName(ownerName);
+            ThenOwnerHasOwnerId();
+        }
+
+        
+
         #endregion
 
         #region Givens
@@ -108,6 +125,10 @@ namespace PetPolicyUnitTests
             _countryCode = "uscountry";
         }
 
+        private static void GivenAnOwnerName(string ownerName)
+        {
+            _ownerName = ownerName;
+        }
         #endregion
 
         #region Whens
@@ -117,6 +138,13 @@ namespace PetPolicyUnitTests
             _petPolicy = PetPolicyFactory.Enroll(_countryCode, _ownerId);
 
         }
+
+
+        private static void WhenAddingAnOwner()
+        {
+            _owner = OwnerFactory.RegisterOwner(_countryCode, _ownerName);
+        }
+
         #endregion
 
         #region Thens
@@ -143,7 +171,28 @@ namespace PetPolicyUnitTests
         {
             Assert.That(_petPolicy.PolicyNumber.Length == 13);
         }
+
+        private static void ThenOwnerHasName(string ownerName)
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(_owner.OwnerName);
+                Assert.IsNotEmpty(_owner.OwnerName);
+                Assert.AreEqual(ownerName, _owner.OwnerName);
+            });
+        }
+
+        private static void ThenOwnerHasOwnerId()
+        {
+            Assert.NotNull(_owner.OwnerId);
+        }
+        private static void ThenOwnerHasCountryId()
+        {
+            Assert.NotNull(_owner.CountryId);
+        }
         #endregion
 
     }
+
+    
 }

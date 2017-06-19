@@ -102,6 +102,81 @@ CREATE NONCLUSTERED INDEX [IX_PetPolicy_AddToPolicyDate]
     ON [dbo].[PetPolicy]([AddToPolicyDate] ASC);
 GO
 
+CREATE PROCEDURE [dbo].[spOwnerInsert]
+	@ownerName nvarchar(200),
+	@countryIso3LetterCode char(3),
+	@ownerId int = NULL OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @countryId int
+	DECLARE @identity int
+	DECLARE @rowCount int
+	DECLARE @errorMessage nvarchar(250)
+
+SELECT @countryId = CountryId 
+		FROM dbo.Country 
+		WHERE CountryIso3LetterCode = @countryIso3LetterCode
+		SELECT @rowCount = @@ROWCOUNT
+		IF @rowCount = 1
+			BEGIN
+				INSERT INTO [dbo].[Owner] 
+				(
+					[OwnerName], 
+					[CountryId]
+				) 
+				VALUES 
+				(
+					@ownerName,
+					@countryId
+				)
+				
+				SET @ownerId = @@IDENTITY
+
+				RETURN 0
+				END;
+		ELSE
+			BEGIN
+				SET @errorMessage = 'Country Id ' + CONVERT(char(3), @countryId) + ' not found.'
+				RAISERROR(@errorMessage, 11, -1, 'spOwnerInsert')
+				RETURN 99
+			END;
+END
+GO
+
+CREATE PROCEDURE [dbo].[spPetInsert]
+	@ownerId int,
+	@petName nvarchar(40),
+	@breedId int,
+	@petDateOfBirth date,
+	@petId int = NULL OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @identity int
+
+	INSERT INTO [dbo].[Pet] 
+	(
+		[OwnerId],
+		[PetName],
+		[BreedId],
+		[PetDateOfBirth]
+	) 
+	VALUES 
+	(
+		@ownerId,
+		@petName,
+		@breedId,
+		@petDateOfBirth
+	)
+				
+	SET @petId = @@IDENTITY
+
+	RETURN 0
+		
+END
+GO
+
 
 CREATE PROCEDURE [dbo].[spPolicyInsert]
 	@ownerId int,
@@ -154,7 +229,7 @@ BEGIN
 		ELSE
 			BEGIN
 				SET @errorMessage = 'Country Id ' + CONVERT(char(3), @countryId) + ' not found.'
-				RAISERROR(@errorMessage, 11, -1, 'EnrollPolicy')
+				RAISERROR(@errorMessage, 11, -1, 'spPolicyInsert')
 				RETURN 99
 			END;
 		

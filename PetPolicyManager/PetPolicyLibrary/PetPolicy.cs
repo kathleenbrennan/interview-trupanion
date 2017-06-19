@@ -38,12 +38,13 @@ namespace PetPolicyLibrary
             //hide constructor so unable to create without initialization 
         }
 
-        //todo: use dependency injection to determine 
-        //  whether or not to use database
+
 
         //enhancement: make so you have to call this from the factory method
         public PetPolicy(string countryCode, int ownerId)
         {
+            //use dependency injection to determine 
+            //  whether or not to use database
             var useDatabaseConfigSetting =
                 System.Configuration.ConfigurationManager.AppSettings["useDatabase"];
 

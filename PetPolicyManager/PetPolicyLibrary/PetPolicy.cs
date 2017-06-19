@@ -55,15 +55,8 @@ namespace PetPolicyLibrary
             IPetPolicyDataProvider provider =
                 PetPolicyDataProviderFactory.GetProvider(useDatabase: useDatabase);
             var dto = new PetPolicyDto();
-            try
-            {
-                dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
-            }
-            catch (Exception ex)
-            {
-                //todo: Exception handling
-                throw (ex);
-            }
+
+            dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
 
             PolicyNumber = dto.PolicyNumber;
         }

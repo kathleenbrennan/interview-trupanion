@@ -42,12 +42,11 @@ namespace PetPolicyDataProvider
 
                 try
                 {
-                    //todo: update the sproc so that we can catch the error here and raise it to the client
                     cmd.ExecuteNonQuery();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    throw ex;
+                    throw new ApplicationException("Unable to create policy due to an error accessing the data store.", ex);
                 }
 
 

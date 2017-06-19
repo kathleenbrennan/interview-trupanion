@@ -23,8 +23,8 @@ CREATE TABLE [dbo].[Policy] (
     [PolicyId]              INT          IDENTITY (1, 1) PRIMARY KEY,
     [PolicyNumberIncrement] INT    NOT NULL,
     [PolicyNumber]          VARCHAR (40) NOT NULL,
-    [PolicyEnrollmentDate]  DATETIME     NOT NULL,
-    [PolicyCancellationDate]  DATETIME,
+    [PolicyEnrollmentDate]  DATE     NOT NULL,
+    [PolicyCancellationDate]  DATE,
     [CountryId]             INT          NOT NULL,
     [OwnerId]            INT          NOT NULL
 	, CONSTRAINT [FK_Policy_ToCountry] 
@@ -65,6 +65,10 @@ create table Pet
 )
 GO
 
+CREATE NONCLUSTERED INDEX [IX_Pet_PetDateOfBirth]
+    ON [dbo].[Pet]([PetDateOfBirth] ASC);
+GO
+
 create table Breed
 (
 		BreedId		int identity(1,1) PRIMARY KEY
@@ -87,8 +91,8 @@ CREATE TABLE [dbo].[PetPolicy] (
     [PetPolicyId]          INT identity(1,1)      PRIMARY KEY,
     [PetId]                INT      NOT NULL,
     [PolicyId]             INT      NOT NULL,
-    [AddToPolicyDate]      DATETIME NOT NULL,
-    [RemoveFromPolicyDate] DATETIME NULL,
+    [AddToPolicyDate]      DATE NOT NULL,
+    [RemoveFromPolicyDate] DATE NULL,
     CONSTRAINT [FK_PetPolicy_ToPet] FOREIGN KEY ([PetId]) REFERENCES [dbo].[Pet] ([PetId]),
     CONSTRAINT [FK_PetPolicy_ToPolicy] FOREIGN KEY ([PolicyId]) REFERENCES [dbo].[Policy] ([PolicyId])
 	);

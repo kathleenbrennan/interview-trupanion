@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOwner.cs" />
+    <Compile Include="IPet.cs" />
     <Compile Include="IPetPolicy.cs" />
+    <Compile Include="PetDto.cs" />
+    <Compile Include="PetOwnerDto.cs" />
     <Compile Include="PetPolicyDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

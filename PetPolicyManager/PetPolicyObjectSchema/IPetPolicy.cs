@@ -4,6 +4,4 @@
     {
         string PolicyNumber { get; set; }
     }
-
-   
 }

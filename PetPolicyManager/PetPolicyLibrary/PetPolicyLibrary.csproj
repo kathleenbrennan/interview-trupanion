@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Exceptions.cs" />
     <Compile Include="Owner.cs" />
+    <Compile Include="Pet.cs" />
     <Compile Include="PetPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

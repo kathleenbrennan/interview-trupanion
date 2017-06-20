@@ -20,5 +20,17 @@ namespace PetPolicyDataProvider
             };
 
         }
+
+        public override PetDto AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth)
+        {
+            return new PetDto
+            {
+                OwnerId = ownerId,
+                PetName = petName,
+                SpeciesId = speciesId,
+                BreedName = breedName,
+                PetDateOfBirth = petDateOfBirth
+            };
+        }
     }
 }

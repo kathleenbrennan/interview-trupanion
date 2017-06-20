@@ -9,17 +9,16 @@ using PetPolicyObjectSchema;
 
 namespace PetPolicyLibrary
 {
+
     public static class OwnerFactory
     {
-        public static Owner RegisterOwner(string countryCode, string ownerName)
+        public static IOwner RegisterOwner(string countryCode, string ownerName)
         {
             return new Owner(countryCode, ownerName);
         }
     }
-    public class Owner
+    public class Owner : IOwner
     {
-
-
         public int OwnerId { get; }
         public string OwnerName { get;  }
         public int CountryId { get; }

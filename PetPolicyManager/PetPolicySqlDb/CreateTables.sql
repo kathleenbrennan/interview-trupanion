@@ -147,13 +147,34 @@ GO
 CREATE PROCEDURE [dbo].[spPetInsert]
 	@ownerId int,
 	@petName nvarchar(40),
-	@breedId int,
+	@speciesId int, -- 1 = cat, 2 = dog
+	@breedName varchar(50),
 	@petDateOfBirth date,
 	@petId int = NULL OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON
+	
+	DECLARE @breedId int
 	DECLARE @identity int
+	DECLARE @rowCount int
+	DECLARE @errorMessage nvarchar(250)
+
+	-- get or insert breed
+	-- for the purposes of this exercise we are not doing thorough
+	--     checking to make sure the breed names are controlled
+	--     but we would in production, or have them selected from a data-driven list
+	SELECT @breedId = BreedId 
+		FROM dbo.Breed 
+		WHERE LOWER(BreedName) = LOWER(@breedName)
+		SELECT @rowCount = @@ROWCOUNT
+		IF @rowCount = 0
+		BEGIN
+			INSERT INTO Breed (BreedName, SpeciesId)
+			VALUES (@breedName, @speciesId)
+			SET @breedId = @@IDENTITY
+		END
+
 
 	INSERT INTO [dbo].[Pet] 
 	(

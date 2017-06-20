@@ -13,7 +13,12 @@ namespace PetPolicyUnitTests
         private static int? _ownerId = 1; //default if not set explicitly
         private static IPetPolicy _petPolicy;
         private static string _ownerName;
-        private static Owner _owner;
+        private static IOwner _owner;
+        private static string _petName;
+        private static int _speciesId;
+        private static string _breedName;
+        private static DateTime _petDateOfBirth;
+        private static IPet _pet;
 
         #region Tests
         [Test]
@@ -39,8 +44,6 @@ namespace PetPolicyUnitTests
             GivenANullOwnerId();
             ThenCreatingPolicyIsNotPossible();
         }
-
-
 
         [Test]
         public static void CreatingPolicyWithTooShortCountryCodeThrowsException()
@@ -90,7 +93,21 @@ namespace PetPolicyUnitTests
             ThenOwnerHasOwnerId();
         }
 
-        
+        [Test]
+        public static void CanAddAPet()
+        {
+            var ownerId = 3;
+            var petName = "Stella";
+            var speciesId = 2;
+            var breedName = "Boxer";
+            var petDateOfBirth = new DateTime(2014,02,01);
+            GivenAnOwnerId(ownerId);
+            GivenAPet(petName, speciesId, breedName, petDateOfBirth);
+            WhenAddingAPet();
+            ThenPetHasPetId();
+            ThenPetHasData(petName, speciesId, breedName, petDateOfBirth, ownerId);
+        }
+
 
         #endregion
 
@@ -129,6 +146,16 @@ namespace PetPolicyUnitTests
         {
             _ownerName = ownerName;
         }
+
+
+        private static void GivenAPet(string petName, int speciesId, string breedName, DateTime petDateOfBirth)
+        {
+            _petName = petName;
+            _speciesId = speciesId;
+            _breedName = breedName;
+            _petDateOfBirth = petDateOfBirth;
+        }
+
         #endregion
 
         #region Whens
@@ -143,6 +170,12 @@ namespace PetPolicyUnitTests
         private static void WhenAddingAnOwner()
         {
             _owner = OwnerFactory.RegisterOwner(_countryCode, _ownerName);
+        }
+
+
+        private static void WhenAddingAPet()
+        {
+            _pet = PetFactory.AddPet(_ownerId.GetValueOrDefault(), _petName, _speciesId, _breedName, _petDateOfBirth);
         }
 
         #endregion
@@ -189,6 +222,21 @@ namespace PetPolicyUnitTests
         private static void ThenOwnerHasCountryId()
         {
             Assert.NotNull(_owner.CountryId);
+        }
+
+
+        private static void ThenPetHasData(string petName, int speciesId, string breedName, DateTime petDateOfBirth, int ownerId)
+        {
+            Assert.AreEqual(petName, _pet.PetName);
+            Assert.AreEqual(speciesId, _pet.SpeciesId);
+            Assert.AreEqual(breedName, _pet.BreedName);
+            Assert.AreEqual(petDateOfBirth, _pet.PetDateOfBirth);
+            Assert.AreEqual(ownerId, _pet.OwnerId);
+        }
+
+        private static void ThenPetHasPetId()
+        {
+            Assert.NotNull(_pet.PetId);
         }
         #endregion
 

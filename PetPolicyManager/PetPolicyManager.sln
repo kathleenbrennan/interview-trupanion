@@ -15,6 +15,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PetPolicySqlDb", "PetPolicy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetPolicyIntegrationTests", "PetPolicyIntegrationTests\PetPolicyIntegrationTests.csproj", "{04BB33B9-87C7-4A97-809F-E8873253CDA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetPolicyApi", "PetPolicyApi\PetPolicyApi.csproj", "{E49645C5-C348-4703-B65E-1245FDBD61B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04BB33B9-87C7-4A97-809F-E8873253CDA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E49645C5-C348-4703-B65E-1245FDBD61B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E49645C5-C348-4703-B65E-1245FDBD61B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E49645C5-C348-4703-B65E-1245FDBD61B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E49645C5-C348-4703-B65E-1245FDBD61B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

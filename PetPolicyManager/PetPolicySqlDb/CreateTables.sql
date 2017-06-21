@@ -306,4 +306,49 @@ ELSE
 END
 GO
 
+CREATE VIEW [dbo].[vwPolicyAndOwner]
+	AS 
+	SELECT 
+		pol.PolicyId,
+		pol.PolicyNumber,
+		pol.PolicyEnrollmentDate,
+		pol.PolicyCancellationDate,
+		pol.CountryId,
+		Country.CountryIso3LetterCode,
+		o.OwnerId,
+		o.OwnerName
+	FROM Policy pol
+	INNER JOIN Country
+	ON pol.CountryId = Country.CountryId
+	LEFT JOIN Owner o
+	ON pol.OwnerId = o.OwnerId
+	
+GO
 
+CREATE VIEW [dbo].[vwPolicyAndPets]
+	AS 
+	
+	SELECT  
+		pol.PolicyId,
+		pol.PolicyNumber,
+		p.PetId,
+		p.PetName,
+		p.PetDateOfBirth,
+		s.SpeciesId,
+		s.SpeciesName,
+		b.BreedId,
+		b.BreedName, 
+		pp.AddToPolicyDate,
+		pp.RemoveFromPolicyDate
+
+	FROM Policy pol
+	LEFT JOIN PetPolicy pp
+	ON pol.PolicyId = pp.PolicyId
+	INNER JOIN Pet p
+	ON pp.PetId = p.PetId
+	INNER JOIN Breed b
+	ON p.BreedId = b.BreedId
+	INNER JOIN Species s
+	ON b.SpeciesId = s.SpeciesId
+
+	GO

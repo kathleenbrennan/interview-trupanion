@@ -41,10 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProviderFactory.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Owner.cs" />
     <Compile Include="Pet.cs" />
     <Compile Include="PetPolicy.cs" />
+    <Compile Include="PetPolicySummary.cs" />
+    <Compile Include="PetPolicySummaryList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

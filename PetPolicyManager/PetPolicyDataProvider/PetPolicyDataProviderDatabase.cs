@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using PetPolicyObjectSchema;
 
 namespace PetPolicyDataProvider
@@ -136,6 +138,36 @@ namespace PetPolicyDataProvider
                 };
 
             }
+        }
+
+        public override List<PetPolicySummaryDto> GetPetPolicySummaryList(int ownerId)
+        {
+            string queryString =
+                $"SELECT * from vwPolicyAndOwner WHERE OwnerId = {ownerId}";
+            SqlDataAdapter adapter = new SqlDataAdapter(queryString, _sqlConnection);
+
+            DataSet ds = new DataSet();
+            adapter.Fill(ds, "PetPolicySummaryList");
+
+            var petPolicySummaryList = ds.Tables[0].AsEnumerable()
+                .Select
+                (
+                    dr =>
+                    {
+                        var dto = new PetPolicySummaryDto
+                        {
+                            OwnerName = dr.Field<string>("OwnerName"),
+                            CountryIso3LetterCode = dr.Field<string>("CountryIso3LetterCode"),
+                            CountryId = dr.Field<int>("CountryId"),
+                            OwnerId = dr.Field<int>("OwnerId"),
+                            PolicyCancellationDate = dr.Field<DateTime?>("PolicyCancellationDate"),
+                            PolicyEnrollmentDate = dr.Field<DateTime>("PolicyEnrollmentDate"),
+                            PolicyNumber = dr.Field<string>("PolicyNumber"),
+                            PolicyId = dr.Field<int>("PolicyId")
+                        };
+                        return dto;
+                    }).ToList();
+            return petPolicySummaryList;
         }
     }
 }

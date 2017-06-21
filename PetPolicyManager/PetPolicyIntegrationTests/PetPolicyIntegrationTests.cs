@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using PetPolicyLibrary;
 using PetPolicyObjectSchema;
@@ -18,6 +20,7 @@ namespace PetPolicyIntegrationTests
         private static string _breedName;
         private static DateTime _petDateOfBirth;
         private static IPet _pet;
+        private static List<IPetPolicySummary> _petPolicySummaryList;
 
         #region Tests
         [Test]
@@ -63,6 +66,16 @@ namespace PetPolicyIntegrationTests
             ThenPetHasPetId();
             ThenPetHasData(petName, speciesId, breedName, petDateOfBirth, ownerId);
         }
+
+        [Test]
+        public static void CanGetPolicyAndOwnerSummary()
+        {
+            var ownerId = 1;
+            GivenAnOwnerId(ownerId);
+            WhenRetrievingPolicySummary();
+            ThenPetPolicySummaryHasData(ownerId);
+        }
+
 
 
         #endregion
@@ -116,6 +129,11 @@ namespace PetPolicyIntegrationTests
         {
             _pet = PetFactory.AddPet(_ownerId.GetValueOrDefault(), _petName, _speciesId, _breedName, _petDateOfBirth);
         }
+
+        private static void WhenRetrievingPolicySummary()
+        {
+            _petPolicySummaryList = PetPolicyFactory.GetPolicySummaryList(_ownerId.GetValueOrDefault());
+        }
         #endregion
 
         #region Thens
@@ -162,6 +180,18 @@ namespace PetPolicyIntegrationTests
             Assert.AreEqual(breedName, _pet.BreedName);
             Assert.AreEqual(petDateOfBirth, _pet.PetDateOfBirth);
             Assert.AreEqual(ownerId, _pet.OwnerId);
+        }
+
+        private static void ThenPetPolicySummaryHasData(int ownerId)
+        {
+            Assert.IsNotNull(_petPolicySummaryList);
+            Assert.AreNotEqual(0, _petPolicySummaryList.Count);
+            var ownerIds = _petPolicySummaryList
+                .Select(l => l.OwnerId)
+                .Distinct();
+            Assert.AreEqual(1, ownerIds.Count(), "Should only have one ownerId");
+            int distinctOwnerId = ownerIds.First();
+            Assert.AreEqual(ownerId, distinctOwnerId);
         }
 
 

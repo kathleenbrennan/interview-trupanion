@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PetPolicyObjectSchema;
-using PetPolicyDataProvider;
 using System.Configuration;
 
 namespace PetPolicyLibrary
 {
-
     public static class PetPolicyFactory
     {
 
         public static IPetPolicy Enroll(string countryCode, int? ownerId)
         {
-            if(string.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3 )
+            if (string.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3)
             {
                 throw new UnableToCreatePolicyException("A three-letter country code is required to enroll a policy.");
             }
@@ -26,40 +23,35 @@ namespace PetPolicyLibrary
             return new PetPolicy(countryCode, ownerId.Value);
 
         }
-    }
 
-    public class PetPolicy : IPetPolicy
-    {
-
-        public string PolicyNumber { get; set; }
-
-        private PetPolicy()
+        public static List<IPetPolicySummary> GetPolicySummaryList(int ownerId)
         {
-            //hide constructor so unable to create without initialization 
+            
+
+            return PetPolicySummaryList.GetPetPolicySummaryList(ownerId);
         }
 
-
-
-        //enhancement: make so you have to call this from the factory method
-        public PetPolicy(string countryCode, int ownerId)
+        public class PetPolicy : IPetPolicy
         {
-            //use dependency injection to determine 
-            //  whether or not to use database
-            var useDatabaseConfigSetting =
-                System.Configuration.ConfigurationManager.AppSettings["useDatabase"];
 
-            bool result;
-            var useDatabase = 
-                Boolean.TryParse(useDatabaseConfigSetting, out result) 
-                    && result;
+            public string PolicyNumber { get; set; }
 
-            IPetPolicyDataProvider provider =
-                PetPolicyDataProviderFactory.GetProvider(useDatabase: useDatabase);
-            var dto = new PetPolicyDto();
+            private PetPolicy()
+            {
+                //hide constructor so unable to create without initialization 
+            }
 
-            dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
 
-            PolicyNumber = dto.PolicyNumber;
+
+            internal PetPolicy(string countryCode, int ownerId)
+            {
+                var provider = DataProviderFactory.GetDataProvider();
+                var dto = new PetPolicyDto();
+
+                dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
+
+                PolicyNumber = dto.PolicyNumber;
+            }
         }
     }
 }

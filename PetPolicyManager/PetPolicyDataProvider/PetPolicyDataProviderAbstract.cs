@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PetPolicyObjectSchema;
 
 namespace PetPolicyDataProvider
@@ -8,5 +9,6 @@ namespace PetPolicyDataProvider
         public abstract string GeneratePolicyNumber(string countryCode, int ownerId);
         public abstract PetOwnerDto RegisterOwner(string countryCode, string ownerName);
         public abstract PetDto AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth);
+        public abstract List<PetPolicySummaryDto> GetPetPolicySummaryList(int ownerId);
     }
 }

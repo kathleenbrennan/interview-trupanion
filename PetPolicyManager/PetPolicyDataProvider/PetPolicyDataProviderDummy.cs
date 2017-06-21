@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PetPolicyObjectSchema;
 
 namespace PetPolicyDataProvider
@@ -32,5 +33,14 @@ namespace PetPolicyDataProvider
                 PetDateOfBirth = petDateOfBirth
             };
         }
+
+        public override List<PetPolicySummaryDto> GetPetPolicySummaryList(int ownerId)
+        {
+            var list = new List<PetPolicySummaryDto>();
+            list.Add(new PetPolicySummaryDto { OwnerId = ownerId});
+            return list;
+        }
+
+
     }
 }

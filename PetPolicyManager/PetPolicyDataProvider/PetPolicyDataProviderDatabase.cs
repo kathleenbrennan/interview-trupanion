@@ -18,7 +18,6 @@ namespace PetPolicyDataProvider
             _sqlConnection = new SqlConnection(connectionString);
 
             _sqlConnection.Open();
-                
         }
 
         public void Dispose()
@@ -51,7 +50,6 @@ namespace PetPolicyDataProvider
                     throw new ApplicationException("Unable to create policy due to an error accessing the data store.", ex);
                 }
 
-
                 var policyNumber = cmd.Parameters["@policyNumber"].Value.ToString();
                 return policyNumber;
             }
@@ -81,7 +79,6 @@ namespace PetPolicyDataProvider
                 {
                     throw new ApplicationException("Unable to register owner due to an error accessing the data store.", ex);
                 }
-
 
                 var ownerId = int.Parse(cmd.Parameters["@ownerId"].Value.ToString());
                 return new PetOwnerDto
@@ -136,17 +133,26 @@ namespace PetPolicyDataProvider
                     PetDateOfBirth = petDateOfBirth
 
                 };
-
             }
+        }
+
+        public override List<PetPolicySummaryDto> GetPetPolicySummaryList()
+        {
+            var queryString = "SELECT * from vwPolicyAndOwner";
+            return GetPetPolicySummaryDtos(queryString);
         }
 
         public override List<PetPolicySummaryDto> GetPetPolicySummaryList(int ownerId)
         {
-            string queryString =
+            var queryString =
                 $"SELECT * from vwPolicyAndOwner WHERE OwnerId = {ownerId}";
-            SqlDataAdapter adapter = new SqlDataAdapter(queryString, _sqlConnection);
+            return GetPetPolicySummaryDtos(queryString);
+        }
 
-            DataSet ds = new DataSet();
+        private List<PetPolicySummaryDto> GetPetPolicySummaryDtos(string queryString)
+        {
+            var adapter = new SqlDataAdapter(queryString, _sqlConnection);
+            var ds = new DataSet();
             adapter.Fill(ds, "PetPolicySummaryList");
 
             var petPolicySummaryList = ds.Tables[0].AsEnumerable()

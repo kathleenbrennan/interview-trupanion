@@ -34,6 +34,11 @@ namespace PetPolicyDataProvider
             };
         }
 
+        public override List<PetPolicySummaryDto> GetPetPolicySummaryList()
+        {
+            return GetPetPolicySummaryList(1);
+        }
+
         public override List<PetPolicySummaryDto> GetPetPolicySummaryList(int ownerId)
         {
             var list = new List<PetPolicySummaryDto>();

@@ -16,11 +16,27 @@ namespace PetPolicyLibrary
         public int CountryId { get; set; }
         public string CountryIso3LetterCode { get; set; }
 
+
+        public static List<IPetPolicySummary> GetPetPolicySummaryList()
+        {
+            var provider = DataProviderFactory.GetDataProvider();
+            var dtoList = provider.GetPetPolicySummaryList();
+
+            var summaryList = PopulatePetPolicySummaries(dtoList);
+            return summaryList;
+        }
+
         public static List<IPetPolicySummary> GetPetPolicySummaryList(int ownerId)
         {
             var provider = DataProviderFactory.GetDataProvider();
             var dtoList = provider.GetPetPolicySummaryList(ownerId);
 
+            var summaryList = PopulatePetPolicySummaries(dtoList);
+            return summaryList;
+        }
+
+        private static List<IPetPolicySummary> PopulatePetPolicySummaries(List<PetPolicySummaryDto> dtoList)
+        {
             var summaryList = dtoList.Select
             (
                 dto =>

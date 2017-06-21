@@ -24,10 +24,13 @@ namespace PetPolicyLibrary
 
         }
 
+        public static List<IPetPolicySummary> GetPolicySummaryList()
+        {
+            return PetPolicySummaryList.GetPetPolicySummaryList();
+        }
+
         public static List<IPetPolicySummary> GetPolicySummaryList(int ownerId)
         {
-            
-
             return PetPolicySummaryList.GetPetPolicySummaryList(ownerId);
         }
 

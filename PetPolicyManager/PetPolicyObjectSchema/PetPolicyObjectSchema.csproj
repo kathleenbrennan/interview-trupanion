@@ -44,11 +44,11 @@
     <Compile Include="IOwner.cs" />
     <Compile Include="IPet.cs" />
     <Compile Include="IPetPolicy.cs" />
-    <Compile Include="IPetPolicySummary.cs" />
+    <Compile Include="IPolicyAndOwnerSummary.cs" />
     <Compile Include="PetDto.cs" />
     <Compile Include="PetOwnerDto.cs" />
     <Compile Include="PetPolicyDto.cs" />
-    <Compile Include="PetPolicySummaryDto.cs" />
+    <Compile Include="PolicyAndOwnerSummaryDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

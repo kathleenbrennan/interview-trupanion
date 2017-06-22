@@ -12,13 +12,13 @@ namespace PetPolicyService.Controllers
     public class PolicyController : ApiController
     {
         // GET: api/Policy
-        public List<IPetPolicySummary> Get()
+        public List<IPolicyAndOwnerSummary> Get()
         {
             return PetPolicyFactory.GetPolicySummaryList();
         }
 
         // GET api/Policy/5
-        public List<IPetPolicySummary> Get(int id)
+        public List<IPolicyAndOwnerSummary> Get(int id)
         {
             return PetPolicyFactory.GetPolicySummaryListById(id);
         }

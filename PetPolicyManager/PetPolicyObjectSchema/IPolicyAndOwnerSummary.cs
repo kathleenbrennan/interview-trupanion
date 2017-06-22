@@ -2,7 +2,7 @@ using System;
 
 namespace PetPolicyObjectSchema
 {
-    public interface IPetPolicySummary
+    public interface IPolicyAndOwnerSummary
     {
         int PolicyId { get; set; }
         string PolicyNumber { get; set; }

@@ -5,7 +5,7 @@ using PetPolicyObjectSchema;
 
 namespace PetPolicyLibrary
 {
-    public class PetPolicySummaryList : List<IPetPolicySummary>
+    public class PolicyAndOwnerSummaryList : List<IPolicyAndOwnerSummary>
     {
         public int PolicyId { get; set; }
         public string PolicyNumber { get; set; }
@@ -17,39 +17,39 @@ namespace PetPolicyLibrary
         public string CountryIso3LetterCode { get; set; }
 
 
-        public static List<IPetPolicySummary> GetPetPolicySummaryList()
+        public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryList()
         {
             var provider = DataProviderFactory.GetDataProvider();
-            var dtoList = provider.GetPetPolicySummaryList();
+            var dtoList = provider.GetPolicyAndOwnerSummaryList();
 
-            var summaryList = PopulatePetPolicySummaries(dtoList);
+            var summaryList = PopulatePolicyAndOwnerSummaries(dtoList);
             return summaryList;
         }
 
-        public static List<IPetPolicySummary> GetPetPolicySummaryListByOwner(int ownerId)
+        public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryListByOwner(int ownerId)
         {
             var provider = DataProviderFactory.GetDataProvider();
-            var dtoList = provider.GetPetPolicySummaryListByOwner(ownerId);
+            var dtoList = provider.GetPolicyAndOwnerSummaryListByOwner(ownerId);
 
-            var summaryList = PopulatePetPolicySummaries(dtoList);
+            var summaryList = PopulatePolicyAndOwnerSummaries(dtoList);
             return summaryList;
         }
 
-        public static List<IPetPolicySummary> GetPetPolicySummaryListById(int policyId)
+        public static List<IPolicyAndOwnerSummary> GetPetPolicySummaryListById(int policyId)
         {
             var provider = DataProviderFactory.GetDataProvider();
             var dtoList = provider.GetPetPolicySummaryListById(policyId);
 
-            var summaryList = PopulatePetPolicySummaries(dtoList);
+            var summaryList = PopulatePolicyAndOwnerSummaries(dtoList);
             return summaryList;
         }
 
-        private static List<IPetPolicySummary> PopulatePetPolicySummaries(List<PetPolicySummaryDto> dtoList)
+        private static List<IPolicyAndOwnerSummary> PopulatePolicyAndOwnerSummaries(List<PolicyAndOwnerSummaryDto> dtoList)
         {
             var summaryList = dtoList.Select
             (
                 dto =>
-                    new PetPolicySummary
+                    new PolicyAndOwnerAndOwnerSummary
                     {
                         PolicyId = dto.PolicyId,
                         PolicyNumber = dto.PolicyNumber,
@@ -60,7 +60,7 @@ namespace PetPolicyLibrary
                         OwnerId = dto.OwnerId,
                         OwnerName = dto.OwnerName
                     }
-            ).ToList<IPetPolicySummary>();
+            ).ToList<IPolicyAndOwnerSummary>();
             return summaryList;
         }
     }

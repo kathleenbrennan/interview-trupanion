@@ -26,7 +26,7 @@ namespace PetPolicyService.Controllers
 
         // GET: api/Owner/5
         [Route("api/owner/{ownerId}/policy")]
-        public List<IPetPolicySummary> GetPoliciesByOwner(int ownerId)
+        public List<IPolicyAndOwnerSummary> GetPoliciesByOwner(int ownerId)
         {
             return PetPolicyFactory.GetPolicySummaryListByOwner(ownerId);
         }

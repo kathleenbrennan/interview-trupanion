@@ -135,13 +135,13 @@ namespace PetPolicyDataProvider
             }
         }
 
-        public override List<PetPolicySummaryDto> GetPetPolicySummaryList()
+        public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryList()
         {
             var queryString = "SELECT * from vwPolicyAndOwner";
             return GetPetPolicySummaryDtos(queryString);
         }
 
-        public override List<PetPolicySummaryDto> GetPetPolicySummaryListByOwner(int ownerId)
+        public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListByOwner(int ownerId)
         {
             var queryString =
                 $"SELECT * from vwPolicyAndOwner WHERE OwnerId = {ownerId}";
@@ -177,14 +177,14 @@ namespace PetPolicyDataProvider
         }
 
 
-        public override List<PetPolicySummaryDto> GetPetPolicySummaryListById(int policyId)
+        public override List<PolicyAndOwnerSummaryDto> GetPetPolicySummaryListById(int policyId)
         {
             var queryString =
                 $"SELECT * from vwPolicyAndOwner WHERE PolicyId = {policyId}";
             return GetPetPolicySummaryDtos(queryString);
         }
 
-        private List<PetPolicySummaryDto> GetPetPolicySummaryDtos(string queryString)
+        private List<PolicyAndOwnerSummaryDto> GetPetPolicySummaryDtos(string queryString)
         {
             var adapter = new SqlDataAdapter(queryString, _sqlConnection);
             var ds = new DataSet();
@@ -195,7 +195,7 @@ namespace PetPolicyDataProvider
                 (
                     dr =>
                     {
-                        var dto = new PetPolicySummaryDto
+                        var dto = new PolicyAndOwnerSummaryDto
                         {
                             OwnerName = dr.Field<string>("OwnerName"),
                             CountryIso3LetterCode = dr.Field<string>("CountryIso3LetterCode"),

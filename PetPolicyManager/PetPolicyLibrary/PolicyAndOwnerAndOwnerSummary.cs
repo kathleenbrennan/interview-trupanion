@@ -5,7 +5,7 @@ using PetPolicyObjectSchema;
 namespace PetPolicyLibrary
 {
 
-    public class PetPolicySummary : IPetPolicySummary
+    public class PolicyAndOwnerAndOwnerSummary : IPolicyAndOwnerSummary
     {
         public int OwnerId { get; set; }
         public int PolicyId { get; set; }
@@ -16,16 +16,8 @@ namespace PetPolicyLibrary
         public int CountryId { get; set; }
         public string CountryIso3LetterCode { get; set; }
 
-        public PetPolicySummary()
+        public PolicyAndOwnerAndOwnerSummary()
         {
-            //OwnerId = ownerId;
-            //PolicyId = policyId;
-            //PolicyNumber = policyNumber;
-            //PolicyEnrollmentDate = policyEnrollmentDate;
-            //PolicyCancellationDate = policyCancellationDate;
-            //OwnerName = ownerName;
-            //CountryId = countryId;
-            //CountryIso3LetterCode = countryIso3LetterCode;
         }
     }
 }

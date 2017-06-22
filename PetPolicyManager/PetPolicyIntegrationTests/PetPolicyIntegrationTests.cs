@@ -20,7 +20,7 @@ namespace PetPolicyIntegrationTests
         private static string _breedName;
         private static DateTime _petDateOfBirth;
         private static IPet _pet;
-        private static List<IPetPolicySummary> _petPolicySummaryList;
+        private static List<IPolicyAndOwnerSummary> _petPolicySummaryList;
         private static int _petId;
         private static int _policyId;
         private static DateTime? _petPolicyAddDate;

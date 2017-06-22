@@ -2,7 +2,7 @@ using System;
 
 namespace PetPolicyObjectSchema
 {
-    public class PetPolicySummaryDto
+    public class PolicyAndOwnerSummaryDto
     {
         public int PolicyId { get; set; }
         public string PolicyNumber { get; set; }

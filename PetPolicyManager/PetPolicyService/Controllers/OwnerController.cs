@@ -35,10 +35,16 @@ namespace PetPolicyService.Controllers
         [Route("api/owner/{ownerId}/policy/countryCode={countryCode}")]
         public IHttpActionResult Post([FromUri]int ownerId, [FromUri]string countryCode)
         {
-            var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
-
-            string location = Request.RequestUri + "/" + ownerId.ToString() + "/policy";
-            return Created(location, new { policyNumber = policy.PolicyNumber });
+            try
+            {
+                var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
+                string location = Request.RequestUri + "/" + ownerId.ToString() + "/policy";
+                return Created(location, new {policyNumber = policy.PolicyNumber});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //// PUT: api/Owner/5

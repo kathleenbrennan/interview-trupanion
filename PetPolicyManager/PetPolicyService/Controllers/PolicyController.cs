@@ -15,7 +15,6 @@ namespace PetPolicyService.Controllers
         public List<IPetPolicySummary> Get()
         {
             return PetPolicyFactory.GetPolicySummaryList();
-            //return new string[] { "value1", "value2" };
         }
 
         // GET api/Policy/5

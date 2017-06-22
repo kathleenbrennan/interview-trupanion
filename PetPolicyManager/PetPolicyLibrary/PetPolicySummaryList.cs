@@ -26,10 +26,19 @@ namespace PetPolicyLibrary
             return summaryList;
         }
 
-        public static List<IPetPolicySummary> GetPetPolicySummaryList(int ownerId)
+        public static List<IPetPolicySummary> GetPetPolicySummaryListByOwner(int ownerId)
         {
             var provider = DataProviderFactory.GetDataProvider();
-            var dtoList = provider.GetPetPolicySummaryList(ownerId);
+            var dtoList = provider.GetPetPolicySummaryListByOwner(ownerId);
+
+            var summaryList = PopulatePetPolicySummaries(dtoList);
+            return summaryList;
+        }
+
+        public static List<IPetPolicySummary> GetPetPolicySummaryListById(int policyId)
+        {
+            var provider = DataProviderFactory.GetDataProvider();
+            var dtoList = provider.GetPetPolicySummaryListById(policyId);
 
             var summaryList = PopulatePetPolicySummaries(dtoList);
             return summaryList;

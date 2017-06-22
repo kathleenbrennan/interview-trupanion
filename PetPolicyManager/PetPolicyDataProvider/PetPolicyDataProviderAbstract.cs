@@ -10,6 +10,7 @@ namespace PetPolicyDataProvider
         public abstract PetOwnerDto RegisterOwner(string countryCode, string ownerName);
         public abstract PetDto AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth);
         public abstract List<PetPolicySummaryDto> GetPetPolicySummaryList();
-        public abstract List<PetPolicySummaryDto> GetPetPolicySummaryList(int ownerId);
+        public abstract List<PetPolicySummaryDto> GetPetPolicySummaryListById(int policyId);
+        public abstract List<PetPolicySummaryDto> GetPetPolicySummaryListByOwner(int ownerId);
     }
 }

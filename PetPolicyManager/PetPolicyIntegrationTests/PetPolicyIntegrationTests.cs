@@ -132,7 +132,7 @@ namespace PetPolicyIntegrationTests
 
         private static void WhenRetrievingPolicySummary()
         {
-            _petPolicySummaryList = PetPolicyFactory.GetPolicySummaryList(_ownerId.GetValueOrDefault());
+            _petPolicySummaryList = PetPolicyFactory.GetPolicySummaryListByOwner(_ownerId.GetValueOrDefault());
         }
         #endregion
 

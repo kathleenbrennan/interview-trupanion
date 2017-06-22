@@ -5,7 +5,7 @@ using PetPolicyObjectSchema;
 namespace PetPolicyLibrary
 {
 
-    public class PolicyAndOwnerAndOwnerSummary : IPolicyAndOwnerSummary
+    public class PolicyAndOwnerSummary : IPolicyAndOwnerSummary
     {
         public int OwnerId { get; set; }
         public int PolicyId { get; set; }
@@ -15,9 +15,5 @@ namespace PetPolicyLibrary
         public string OwnerName { get; set; }
         public int CountryId { get; set; }
         public string CountryIso3LetterCode { get; set; }
-
-        public PolicyAndOwnerAndOwnerSummary()
-        {
-        }
     }
 }

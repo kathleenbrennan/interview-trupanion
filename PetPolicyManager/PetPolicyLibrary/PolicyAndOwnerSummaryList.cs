@@ -7,16 +7,6 @@ namespace PetPolicyLibrary
 {
     public class PolicyAndOwnerSummaryList : List<IPolicyAndOwnerSummary>
     {
-        public int PolicyId { get; set; }
-        public string PolicyNumber { get; set; }
-        public DateTime PolicyEnrollmentDate { get; set; }
-        public DateTime PolicyCancellationDate { get; set; }
-        public int OwnerId { get; set; }
-        public string OwnerName { get; set; }
-        public int CountryId { get; set; }
-        public string CountryIso3LetterCode { get; set; }
-
-
         public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryList()
         {
             var provider = DataProviderFactory.GetDataProvider();
@@ -35,10 +25,10 @@ namespace PetPolicyLibrary
             return summaryList;
         }
 
-        public static List<IPolicyAndOwnerSummary> GetPetPolicySummaryListById(int policyId)
+        public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryListById(int policyId)
         {
             var provider = DataProviderFactory.GetDataProvider();
-            var dtoList = provider.GetPetPolicySummaryListById(policyId);
+            var dtoList = provider.GetPolicyAndOwnerSummaryListById(policyId);
 
             var summaryList = PopulatePolicyAndOwnerSummaries(dtoList);
             return summaryList;
@@ -49,7 +39,7 @@ namespace PetPolicyLibrary
             var summaryList = dtoList.Select
             (
                 dto =>
-                    new PolicyAndOwnerAndOwnerSummary
+                    new PolicyAndOwnerSummary
                     {
                         PolicyId = dto.PolicyId,
                         PolicyNumber = dto.PolicyNumber,

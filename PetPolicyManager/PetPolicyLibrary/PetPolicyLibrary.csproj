@@ -47,8 +47,10 @@
     <Compile Include="Owner.cs" />
     <Compile Include="Pet.cs" />
     <Compile Include="PetPolicy.cs" />
-    <Compile Include="PolicyAndOwnerAndOwnerSummary.cs" />
+    <Compile Include="PolicyAndOwnerSummary.cs" />
     <Compile Include="PolicyAndOwnerSummaryList.cs" />
+    <Compile Include="PolicyAndPetSummary.cs" />
+    <Compile Include="PolicyAndPetSummaryList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

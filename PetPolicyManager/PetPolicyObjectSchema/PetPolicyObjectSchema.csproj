@@ -45,10 +45,12 @@
     <Compile Include="IPet.cs" />
     <Compile Include="IPetPolicy.cs" />
     <Compile Include="IPolicyAndOwnerSummary.cs" />
+    <Compile Include="IPolicyAndPetSummary.cs" />
     <Compile Include="PetDto.cs" />
     <Compile Include="PetOwnerDto.cs" />
     <Compile Include="PetPolicyDto.cs" />
     <Compile Include="PolicyAndOwnerSummaryDto.cs" />
+    <Compile Include="PolicyAndPetSummaryDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

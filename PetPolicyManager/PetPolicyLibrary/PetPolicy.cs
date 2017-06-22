@@ -25,19 +25,29 @@ namespace PetPolicyLibrary
 
         }
 
-        public static List<IPolicyAndOwnerSummary> GetPolicySummaryList()
+        public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryList()
         {
             return PolicyAndOwnerSummaryList.GetPolicyAndOwnerSummaryList();
         }
 
-        public static List<IPolicyAndOwnerSummary> GetPolicySummaryListByOwner(int ownerId)
+        public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryListByOwner(int ownerId)
         {
             return PolicyAndOwnerSummaryList.GetPolicyAndOwnerSummaryListByOwner(ownerId);
         }
 
-        public static List<IPolicyAndOwnerSummary> GetPolicySummaryListById(int policyId)
+        public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryListById(int policyId)
         {
-            return PolicyAndOwnerSummaryList.GetPetPolicySummaryListById(policyId);
+            return PolicyAndOwnerSummaryList.GetPolicyAndOwnerSummaryListById(policyId);
+        }
+
+        public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByPolicyId()
+        {
+            return PolicyAndPetSummaryList.GetPolicyAndPetSummaryList();
+        }
+
+        public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByPolicyId(int policyId)
+        {
+            return PolicyAndPetSummaryList.GetPolicyAndPetSummaryList(policyId);
         }
 
         public class PetPolicy : IPetPolicy

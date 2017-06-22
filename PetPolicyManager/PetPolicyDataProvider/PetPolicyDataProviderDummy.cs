@@ -40,7 +40,7 @@ namespace PetPolicyDataProvider
             return list;
         }
 
-        public override List<PolicyAndOwnerSummaryDto> GetPetPolicySummaryListById(int policyId)
+        public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListById(int policyId)
         {
             var list = new List<PolicyAndOwnerSummaryDto> { new PolicyAndOwnerSummaryDto { PolicyId = policyId } };
             return list;
@@ -63,6 +63,18 @@ namespace PetPolicyDataProvider
         {
             //this doesn't really test anything since it is always successful
             return DateTime.Now;
+        }
+
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList()
+        {
+            var list = new List<PolicyAndPetSummaryDto> { new PolicyAndPetSummaryDto { PetId = 1 } };
+            return list;
+        }
+
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyId(int policyId)
+        {
+            var list = new List<PolicyAndPetSummaryDto> { new PolicyAndPetSummaryDto { PetId = 1 } };
+            return list;
         }
     }
 }

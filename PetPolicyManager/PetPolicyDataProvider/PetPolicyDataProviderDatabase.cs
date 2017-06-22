@@ -138,14 +138,14 @@ namespace PetPolicyDataProvider
         public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryList()
         {
             var queryString = "SELECT * from vwPolicyAndOwner";
-            return GetPetPolicySummaryDtos(queryString);
+            return GetPolicyAndOwnerSummaryDtos(queryString);
         }
 
         public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListByOwner(int ownerId)
         {
             var queryString =
                 $"SELECT * from vwPolicyAndOwner WHERE OwnerId = {ownerId}";
-            return GetPetPolicySummaryDtos(queryString);
+            return GetPolicyAndOwnerSummaryDtos(queryString);
         }
 
         public override DateTime? AddPetToPolicy(int petId, int policyId)
@@ -176,19 +176,31 @@ namespace PetPolicyDataProvider
             }
         }
 
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList()
+        {
+            var queryString = "SELECT * from vwPolicyAndPets";
+            return GetPolicyAndPetSummaryDtos(queryString);
+        }
 
-        public override List<PolicyAndOwnerSummaryDto> GetPetPolicySummaryListById(int policyId)
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyId(int policyId)
+        {
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId}";
+            return GetPolicyAndPetSummaryDtos(queryString);
+        }
+
+
+        public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListById(int policyId)
         {
             var queryString =
                 $"SELECT * from vwPolicyAndOwner WHERE PolicyId = {policyId}";
-            return GetPetPolicySummaryDtos(queryString);
+            return GetPolicyAndOwnerSummaryDtos(queryString);
         }
 
-        private List<PolicyAndOwnerSummaryDto> GetPetPolicySummaryDtos(string queryString)
+        private List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryDtos(string queryString)
         {
             var adapter = new SqlDataAdapter(queryString, _sqlConnection);
             var ds = new DataSet();
-            adapter.Fill(ds, "PetPolicySummaryList");
+            adapter.Fill(ds, "PolicyAndOwnerSummaryList");
 
             var petPolicySummaryList = ds.Tables[0].AsEnumerable()
                 .Select
@@ -209,6 +221,38 @@ namespace PetPolicyDataProvider
                         return dto;
                     }).ToList();
             return petPolicySummaryList;
+        }
+
+        private List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryDtos(string queryString)
+        {
+            var adapter = new SqlDataAdapter(queryString, _sqlConnection);
+            var ds = new DataSet();
+            adapter.Fill(ds, "PolicyAndPetSummaryList");
+
+            var list = ds.Tables[0].AsEnumerable()
+                .Select
+                (
+                    dr =>
+                    {
+                        var dto = new PolicyAndPetSummaryDto
+                        {
+                            PolicyId = dr.Field<int>("PolicyId"),
+                            PolicyNumber = dr.Field<string>("PolicyNumber"),
+                            PetId = dr.Field<int>("PetId"),
+                            PetName = dr.Field<string>("PetName"),
+                            PetDateOfBirth = dr.Field<DateTime>("PetDateOfBirth"),
+                            SpeciesId = dr.Field<int>("SpeciesId"),
+                            SpeciesName = dr.Field<string>("SpeciesName"),
+                            BreedId = dr.Field<int>("BreedId"),
+                            BreedName = dr.Field<string>("BreedName"),
+                            AddToPolicyDate = dr.Field<DateTime>("AddToPolicyDate"),
+                            RemoveFromPolicyDate = dr.Field<DateTime?>("RemoveFromPolicyDate"),
+
+
+                        };
+                        return dto;
+                    }).ToList();
+            return list;
         }
     }
 }

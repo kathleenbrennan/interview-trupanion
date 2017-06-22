@@ -20,7 +20,9 @@ namespace PetPolicyIntegrationTests
         private static string _breedName;
         private static DateTime _petDateOfBirth;
         private static IPet _pet;
-        private static List<IPolicyAndOwnerSummary> _petPolicySummaryList;
+        private static List<IPolicyAndOwnerSummary> _policyAndOwnerSummaryList;
+        private static List<IPolicyAndPetSummary> _policyAndPetSummaryList;
+
         private static int _petId;
         private static int _policyId;
         private static DateTime? _petPolicyAddDate;
@@ -76,8 +78,17 @@ namespace PetPolicyIntegrationTests
         {
             var ownerId = 1;
             GivenAnOwnerId(ownerId);
-            WhenRetrievingPolicySummary();
-            ThenPetPolicySummaryHasData(ownerId);
+            WhenRetrievingPolicyAndOwnerSummary();
+            ThenPolicyAndOwnerSummaryHasData(ownerId);
+        }
+
+        [Test]
+        public static void CanGetPolicyAndPetSummary()
+        {
+            var policyId = 3;
+            GivenAPolicy(policyId);
+            WhenRetrievingPolicyAndPetSummary();
+            ThenPolicyAndPetSummaryHasData(policyId);
         }
 
         [Test]
@@ -97,7 +108,6 @@ namespace PetPolicyIntegrationTests
             WhenRemovingPetPolicy();
             ThenPetIsRemovedFromPolicy();
         }
-
 
 
         #endregion
@@ -161,9 +171,15 @@ namespace PetPolicyIntegrationTests
             _pet = PetFactory.AddPet(_ownerId.GetValueOrDefault(), _petName, _speciesId, _breedName, _petDateOfBirth);
         }
 
-        private static void WhenRetrievingPolicySummary()
+        private static void WhenRetrievingPolicyAndOwnerSummary()
         {
-            _petPolicySummaryList = PetPolicyFactory.GetPolicySummaryListByOwner(_ownerId.GetValueOrDefault());
+            _policyAndOwnerSummaryList = PetPolicyFactory.GetPolicyAndOwnerSummaryListByOwner(_ownerId.GetValueOrDefault());
+        }
+
+
+        private static void WhenRetrievingPolicyAndPetSummary()
+        {
+            _policyAndPetSummaryList = PetPolicyFactory.GetPolicyAndPetSummaryListByPolicyId(_policyId);
         }
 
         private static void WhenAddingPetToPolicy()
@@ -222,16 +238,28 @@ namespace PetPolicyIntegrationTests
             Assert.AreEqual(ownerId, _pet.OwnerId);
         }
 
-        private static void ThenPetPolicySummaryHasData(int ownerId)
+        private static void ThenPolicyAndOwnerSummaryHasData(int ownerId)
         {
-            Assert.IsNotNull(_petPolicySummaryList);
-            Assert.AreNotEqual(0, _petPolicySummaryList.Count);
-            var ownerIds = _petPolicySummaryList
+            Assert.IsNotNull(_policyAndOwnerSummaryList);
+            Assert.AreNotEqual(0, _policyAndOwnerSummaryList.Count);
+            var ownerIds = _policyAndOwnerSummaryList
                 .Select(l => l.OwnerId)
                 .Distinct();
             Assert.AreEqual(1, ownerIds.Count(), "Should only have one ownerId");
             int distinctOwnerId = ownerIds.First();
             Assert.AreEqual(ownerId, distinctOwnerId);
+        }
+
+        private static void ThenPolicyAndPetSummaryHasData(int policyId)
+        {
+            Assert.IsNotNull(_policyAndPetSummaryList);
+            Assert.AreNotEqual(0, _policyAndPetSummaryList.Count);
+            var distinctPolicyIds = _policyAndPetSummaryList
+                .Select(l => l.PolicyId)
+                .Distinct();
+            Assert.AreEqual(1, distinctPolicyIds.Count(), "Should only have one ownerId");
+            int distinctPolicyId = distinctPolicyIds.First();
+            Assert.AreEqual(policyId, distinctPolicyId);
         }
 
         private static void ThenPetIsAddedToPolicy()

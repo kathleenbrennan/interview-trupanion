@@ -12,6 +12,5 @@ namespace PetPolicyObjectSchema
         public string OwnerName { get; set; }
         public int CountryId { get; set; }
         public string CountryIso3LetterCode { get; set; }
-
     }
 }

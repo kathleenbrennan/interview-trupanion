@@ -37,11 +37,17 @@ namespace PetPolicyService.Controllers
         }
 
 
-        // POST: api/Policy
-        public void Post([FromBody]string value)
-        {
-        }
+        //// POST: api/Policy
+        //public void Post([FromBody]string value)
+        //{
+        //}
 
+        /// <summary>
+        /// Adds a pet to the policy
+        /// </summary>
+        /// <param name="policyId">Unique identifier of the policy.</param>
+        /// <param name="pet">JSON object with the properties of the pet.</param>
+        /// <returns>Http result</returns>
         [Route("api/policy/{policyId}/pets")]
         public IHttpActionResult Put([FromUri]int policyId, [FromBody]PetModel pet)
         {
@@ -56,23 +62,47 @@ namespace PetPolicyService.Controllers
                     break;
                 default:
                     return BadRequest("Must select cat or dog.");
-
             }
 
-            //add the pet to the datastore and then add the pet to the policy
-            //in a production system you would have more error checking and transactional behavior around this
-            //  so that the system didn't end up in an inconsistent state
+            try
+            {
+                //add the pet to the datastore and then add the pet to the policy
+                //in a production system you would have more error checking and transactional behavior around this
+                //  so that the system didn't end up in an inconsistent state
 
-            var petId = PetPolicyFactory.AddPet(pet.OwnerId, pet.PetName, speciesId, pet.BreedName, pet.PetDateOfBirth);
-            PetPolicyFactory.AddPetToPolicy(petId, policyId);
-            string location = Request.RequestUri.ToString();
-            return Created(location, new { petId = petId });
-
+                var petId = PetPolicyFactory.AddPet(pet.OwnerId, pet.PetName, speciesId, pet.BreedName,
+                    pet.PetDateOfBirth);
+                PetPolicyFactory.AddPetToPolicy(petId, policyId);
+                string location = Request.RequestUri.ToString();
+                return Created(location, new {petId = petId});
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
-        // DELETE: api/Policy/5
-        public void Delete(int id)
+        /// <summary>
+        /// Remove a pet from the policy
+        /// </summary>
+        /// <param name="policyId">Unique identifier of the policy.</param>
+        /// <param name="petId">JSON object with the properties of the pet.</param>
+        /// <returns>Http result</returns>
+        [Route("api/policy/{policyId}/pets/{petId}")]
+        public IHttpActionResult Delete([FromUri]int policyId, [FromUri]int petId)
         {
+            try
+            {
+                //internally we are setting the pet's status on the policy as removed
+                //  but we are not actually deleting the record
+                //  but for the user's point of view we tell them the pet was removed
+                PetPolicyFactory.RemovePetFromPolicy(petId, policyId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }

@@ -178,19 +178,19 @@ namespace PetPolicyDataProvider
 
         public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList()
         {
-            var queryString = "SELECT * from vwPolicyAndPets";
+            var queryString = "SELECT * from vwPolicyAndPets AND RemoveFromPolicyDate IS NULL";
             return GetPolicyAndPetSummaryDtos(queryString);
         }
 
         public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyId(int policyId)
         {
-            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId}";
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId}  AND RemoveFromPolicyDate IS NULL";
             return GetPolicyAndPetSummaryDtos(queryString);
         }
 
         public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId)
         {
-            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId} AND PetId = {petId}";
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId} AND PetId = {petId} AND RemoveFromPolicyDate IS NULL";
             return GetPolicyAndPetSummaryDtos(queryString);
         }
 
@@ -198,7 +198,7 @@ namespace PetPolicyDataProvider
         public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListById(int policyId)
         {
             var queryString =
-                $"SELECT * from vwPolicyAndOwner WHERE PolicyId = {policyId}";
+                $"SELECT * from vwPolicyAndOwner WHERE PolicyId = {policyId} AND PolicyCancellationDate IS NULL";
             return GetPolicyAndOwnerSummaryDtos(queryString);
         }
 

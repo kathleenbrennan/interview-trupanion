@@ -24,11 +24,6 @@ namespace PetPolicyService.Controllers
             return PetPolicyFactory.GetPolicySummaryListById(id);
         }
 
-        //[Route("owner/{ownerId}/policy")]
-        //public List<IPetPolicySummary> GetByOwner(int ownerId)
-        //{
-        //    return PetPolicyFactory.GetPolicySummaryListByOwner(ownerId);
-        //}
 
         // POST: api/Policy
         public void Post([FromBody]string value)

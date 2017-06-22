@@ -25,6 +25,15 @@ namespace PetPolicyLibrary
             return summaryList;
         }
 
+        internal static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryList(int policyId, int petId)
+        {
+            var provider = DataProviderFactory.GetDataProvider();
+            var dtoList = provider.GetPolicyAndPetSummaryListByPolicyIdAndPetId(policyId, petId);
+
+            var summaryList = PopulatePolicyAndPetSummaries(dtoList);
+            return summaryList;
+        }
+
         private static List<IPolicyAndPetSummary> PopulatePolicyAndPetSummaries(List<PolicyAndPetSummaryDto> dtoList)
         {
             var summaryList = dtoList.Select

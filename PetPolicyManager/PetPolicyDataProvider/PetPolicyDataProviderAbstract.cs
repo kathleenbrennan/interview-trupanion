@@ -16,5 +16,6 @@ namespace PetPolicyDataProvider
         public abstract DateTime? RemovePetFromPolicy(int petId, int policyId);
         public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList();
         public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyId(int policyId);
+        public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId);
     }
 }

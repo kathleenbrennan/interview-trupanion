@@ -76,5 +76,11 @@ namespace PetPolicyDataProvider
             var list = new List<PolicyAndPetSummaryDto> { new PolicyAndPetSummaryDto { PetId = 1 } };
             return list;
         }
+
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId)
+        {
+            var list = new List<PolicyAndPetSummaryDto> { new PolicyAndPetSummaryDto { PetId = 1 } };
+            return list;
+        }
     }
 }

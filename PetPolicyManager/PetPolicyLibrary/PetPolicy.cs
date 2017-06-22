@@ -13,7 +13,7 @@ namespace PetPolicyLibrary
 
         public static IPetPolicy Enroll(string countryCode, int? ownerId)
         {
-            if (string.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3)
+            if (String.IsNullOrWhiteSpace(countryCode) || countryCode.Length < 3 || countryCode.Length > 3)
             {
                 throw new UnableToCreatePolicyException("A three-letter country code is required to enroll a policy.");
             }
@@ -22,7 +22,6 @@ namespace PetPolicyLibrary
                 throw new UnableToCreatePolicyException("A non-null owner ID is required to enroll a policy.");
             }
             return new PetPolicy(countryCode, ownerId.Value);
-
         }
 
         public static List<IPolicyAndOwnerSummary> GetPolicyAndOwnerSummaryList()
@@ -50,6 +49,11 @@ namespace PetPolicyLibrary
             return PolicyAndPetSummaryList.GetPolicyAndPetSummaryList(policyId);
         }
 
+        public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId)
+        {
+            return PolicyAndPetSummaryList.GetPolicyAndPetSummaryList(policyId, petId);
+        }
+
         public class PetPolicy : IPetPolicy
         {
 
@@ -71,6 +75,13 @@ namespace PetPolicyLibrary
                 //todo: in a real system, you'd probably want 
                 //  to get the id of the policy in case you wanted to do other things with it
             }
+        }
+
+        public static int AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth)
+        {
+            var provider = DataProviderFactory.GetDataProvider();
+            var petDto = provider.AddPet(ownerId, petName, speciesId, breedName, petDateOfBirth);
+            return petDto.PetId;
         }
 
         public static DateTime? AddPetToPolicy(int petId, int policyId)
@@ -107,5 +118,7 @@ namespace PetPolicyLibrary
                 //todo: would have better error handling here in a real system
             }
         }
+
+
     }
 }

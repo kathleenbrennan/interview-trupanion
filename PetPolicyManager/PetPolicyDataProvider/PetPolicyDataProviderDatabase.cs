@@ -188,6 +188,12 @@ namespace PetPolicyDataProvider
             return GetPolicyAndPetSummaryDtos(queryString);
         }
 
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId)
+        {
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId} AND PetId = {petId}";
+            return GetPolicyAndPetSummaryDtos(queryString);
+        }
+
 
         public override List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListById(int policyId)
         {

@@ -19,6 +19,10 @@ namespace PetPolicyUnitTests
         private static string _breedName;
         private static DateTime _petDateOfBirth;
         private static IPet _pet;
+        private static int _petId;
+        private static int _policyId;
+        private static DateTime? _petPolicyAddDate;
+        private static DateTime? _petPolicyRemoveDate;
 
         #region Tests
         [Test]
@@ -108,11 +112,30 @@ namespace PetPolicyUnitTests
             ThenPetHasData(petName, speciesId, breedName, petDateOfBirth, ownerId);
         }
 
+        [Test]
+        public static void CanAddPetToPolicy()
+        {
+            GivenAPet(1);
+            GivenAPolicy(12);
+            WhenAddingPetToPolicy();
+            ThenPetIsAddedToPolicy();
+            //NOTE: this is not really a very good test since the dummy data provider always succeeds
+        }
+
+        [Test]
+        public static void CanRemovePetFromPolicy()
+        {
+            GivenAPet(1);
+            GivenAPolicy(12);
+            WhenRemovingPetPolicy();
+            ThenPetIsRemovedFromPolicy();
+            //NOTE: this is not really a very good test since the dummy data provider always succeeds
+        }
 
         #endregion
 
-        #region Givens
-        private static void GivenACountryCode(string countryCode)
+            #region Givens
+            private static void GivenACountryCode(string countryCode)
         {
             _countryCode = countryCode;
         }
@@ -156,6 +179,16 @@ namespace PetPolicyUnitTests
             _petDateOfBirth = petDateOfBirth;
         }
 
+        private static void GivenAPet(int petId)
+        {
+            _petId = petId;
+        }
+
+        private static void GivenAPolicy(int policyId)
+        {
+            _policyId = policyId;
+        }
+
         #endregion
 
         #region Whens
@@ -165,7 +198,6 @@ namespace PetPolicyUnitTests
             _petPolicy = PetPolicyFactory.Enroll(_countryCode, _ownerId);
 
         }
-
 
         private static void WhenAddingAnOwner()
         {
@@ -178,6 +210,16 @@ namespace PetPolicyUnitTests
             _pet = PetFactory.AddPet(_ownerId.GetValueOrDefault(), _petName, _speciesId, _breedName, _petDateOfBirth);
         }
 
+        private static void WhenAddingPetToPolicy()
+        {
+            _petPolicyAddDate = PetPolicyFactory.AddPetToPolicy(_petId, _policyId);
+        }
+
+        private static void WhenRemovingPetPolicy()
+        {
+            _petPolicyRemoveDate = PetPolicyFactory.RemovePetFromPolicy(_petId, _policyId);
+        }
+        
         #endregion
 
         #region Thens
@@ -238,6 +280,17 @@ namespace PetPolicyUnitTests
         {
             Assert.NotNull(_pet.PetId);
         }
+
+        private static void ThenPetIsAddedToPolicy()
+        {
+            Assert.IsNotNull(_petPolicyAddDate);
+        }
+
+        private static void ThenPetIsRemovedFromPolicy()
+        {
+            Assert.IsNotNull(_petPolicyRemoveDate);
+        }
+
         #endregion
 
     }

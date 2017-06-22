@@ -111,7 +111,6 @@ namespace PetPolicyDataProvider
                 cmd.Parameters["@breedName"].Value = breedName;
                 cmd.Parameters["@petDateOfBirth"].Value = petDateOfBirth.Date; //chop off any time component since the sql db just stores date
 
-
                 try
                 {
                     cmd.ExecuteNonQuery();
@@ -147,6 +146,34 @@ namespace PetPolicyDataProvider
             var queryString =
                 $"SELECT * from vwPolicyAndOwner WHERE OwnerId = {ownerId}";
             return GetPetPolicySummaryDtos(queryString);
+        }
+
+        public override DateTime? AddPetToPolicy(int petId, int policyId)
+        {
+            using (var cmd = new SqlCommand("dbo.spPetPolicyInsert", _sqlConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@petId", petId);
+                cmd.Parameters.AddWithValue("@policyId", policyId);
+                cmd.Parameters.Add("@petPolicyAddDate", SqlDbType.Date).Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                var addDate = DateTime.Parse(cmd.Parameters["@petPolicyAddDate"].Value.ToString());
+                return addDate;
+            }
+        }
+
+        public override DateTime? RemovePetFromPolicy(int petId, int policyId)
+        {
+            using (var cmd = new SqlCommand("dbo.spPetPolicyUpdateRemovalDate", _sqlConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@petId", petId);
+                cmd.Parameters.AddWithValue("@policyId", policyId);
+                cmd.Parameters.Add("@petPolicyRemovalDate", SqlDbType.Date).Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                var removalDate = DateTime.Parse(cmd.Parameters["@petPolicyRemovalDate"].Value.ToString());
+                return removalDate;
+            }
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,8 +50,6 @@ namespace PetPolicyLibrary
                 //hide constructor so unable to create without initialization 
             }
 
-
-
             internal PetPolicy(string countryCode, int ownerId)
             {
                 var provider = DataProviderFactory.GetDataProvider();
@@ -59,6 +58,43 @@ namespace PetPolicyLibrary
                 dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
 
                 PolicyNumber = dto.PolicyNumber;
+                //todo: in a real system, you'd probably want 
+                //  to get the id of the policy in case you wanted to do other things with it
+            }
+        }
+
+        public static DateTime? AddPetToPolicy(int petId, int policyId)
+        {
+            //todo: check if pet already has a policy and if it does 
+            //  return the policy add date
+            try
+            {
+                var provider = DataProviderFactory.GetDataProvider();
+                DateTime? addDate = provider.AddPetToPolicy(petId, policyId);
+                //todo: return the policy add date
+                return addDate;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //todo: would have better error handling here in a real system
+            }
+        }
+
+        public static DateTime? RemovePetFromPolicy(int petId, int policyId)
+        {
+            //todo: return error if this pet is not on this policy
+            //todo: return policy remove date if successful
+            try
+            {
+                var provider = DataProviderFactory.GetDataProvider();
+                DateTime? removeDate = provider.RemovePetFromPolicy(petId, policyId);
+                return removeDate;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //todo: would have better error handling here in a real system
             }
         }
     }

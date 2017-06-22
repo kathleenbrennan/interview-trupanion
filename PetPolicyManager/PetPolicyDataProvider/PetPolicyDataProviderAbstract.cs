@@ -12,5 +12,7 @@ namespace PetPolicyDataProvider
         public abstract List<PetPolicySummaryDto> GetPetPolicySummaryList();
         public abstract List<PetPolicySummaryDto> GetPetPolicySummaryListById(int policyId);
         public abstract List<PetPolicySummaryDto> GetPetPolicySummaryListByOwner(int ownerId);
+        public abstract DateTime? AddPetToPolicy(int petId, int policyId);
+        public abstract DateTime? RemovePetFromPolicy(int petId, int policyId);
     }
 }

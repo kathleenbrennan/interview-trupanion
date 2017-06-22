@@ -13,7 +13,8 @@ GO
 
 CREATE PROCEDURE [dbo].[spPetPolicyInsert]
 	@petId int,
-	@policyId int
+	@policyId int,
+	@petPolicyAddDate date output
 
 	AS
 	BEGIN
@@ -23,6 +24,8 @@ CREATE PROCEDURE [dbo].[spPetPolicyInsert]
 			since the purpose of the table 
 			is just to hold the relationship
 		*/
+		DECLARE @addDate date
+		SELECT @addDate = getdate()
 
 		INSERT INTO dbo.PetPolicy
 			(
@@ -35,8 +38,10 @@ CREATE PROCEDURE [dbo].[spPetPolicyInsert]
 			(
 			@petId,
 			@policyId,
-			getdate(),
+			@addDate,
 			null)
+
+			SET @petPolicyAddDate = @addDate
 
 		RETURN 0
 	END

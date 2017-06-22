@@ -53,6 +53,16 @@ namespace PetPolicyDataProvider
             return list;
         }
 
+        public override DateTime? AddPetToPolicy(int petId, int policyId)
+        {
+            //this doesn't really test anything since it is always successful
+            return DateTime.Now;
+        }
 
+        public override DateTime? RemovePetFromPolicy(int petId, int policyId)
+        {
+            //this doesn't really test anything since it is always successful
+            return DateTime.Now;
+        }
     }
 }

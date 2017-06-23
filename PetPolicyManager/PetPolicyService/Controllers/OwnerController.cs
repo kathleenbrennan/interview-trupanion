@@ -6,22 +6,18 @@ using System.Net.Http;
 using System.Web.Http;
 using PetPolicyLibrary;
 using PetPolicyObjectSchema;
+using PetPolicyService.Models;
 
 namespace PetPolicyService.Controllers
 {
     public class OwnerController : ApiController
     {
-        // GET: api/Owner
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET: api/Owner/5
-        [Route("api/owner/{id}")]
-        public string Get(int id)
+        [Route("api/owner/{ownerId}")]
+        public IOwner Get(int ownerId)
         {
-            return "owner by id";
+            return OwnerFactory.GetOwner(ownerId);
         }
 
         // GET: api/Owner/5
@@ -31,15 +27,18 @@ namespace PetPolicyService.Controllers
             return PetPolicyFactory.GetPolicyAndOwnerSummaryListByOwner(ownerId);
         }
 
-        // POST: api/Owner
-        [Route("api/owner/{ownerId}/policy/countryCode={countryCode}")]
-        public IHttpActionResult Post([FromUri]int ownerId, [FromUri]string countryCode)
+        public IHttpActionResult Post([FromBody]OwnerModel owner)
         {
+            string ownerName = owner.OwnerName;
+            string countryCode = owner.CountryIso3LetterCode;
+
             try
             {
-                var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
-                string location = Request.RequestUri + "/" + ownerId.ToString() + "/policy";
-                return Created(location, new {policyNumber = policy.PolicyNumber});
+                var ownerDto = OwnerFactory.RegisterOwner(countryCode, ownerName);
+                int ownerId = ownerDto.OwnerId;
+                owner.OwnerId = ownerId;
+                string location = Request.RequestUri + "/" + ownerId.ToString();
+                return Created(location, owner);
             }
             catch (Exception ex)
             {
@@ -47,10 +46,22 @@ namespace PetPolicyService.Controllers
             }
         }
 
-        //// PUT: api/Owner/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
+        [Route("api/owner/{ownerId}/policy/countryCode={countryCode}")]
+        public IHttpActionResult Put([FromUri]int ownerId, [FromUri]string countryCode)
+        {
+            try
+            {
+                var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
+                string location = Request.RequestUri + "/" + ownerId.ToString() + "/policy";
+                return Created(location, new {policyId = policy.PolicyId, policyNumber = policy.PolicyNumber});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
         //// DELETE: api/Owner/5
         //public void Delete(int id)

@@ -26,7 +26,7 @@ namespace PetPolicyDataProvider
             _sqlConnection?.Dispose();
         }
 
-        public override string GeneratePolicyNumber(string countryCode, int ownerId)
+        public override PetPolicyDto EnrollPolicy(string countryCode, int ownerId)
         {
             using (var cmd = new SqlCommand("dbo.spPolicyInsert", _sqlConnection))
             {
@@ -36,6 +36,7 @@ namespace PetPolicyDataProvider
                 cmd.Parameters.Add("@ownerId", SqlDbType.Int);
                 cmd.Parameters.Add("@countryIso3LetterCode", SqlDbType.Char, 3);
                 cmd.Parameters.Add("@policyNumber", SqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@policyId", SqlDbType.Int).Direction = ParameterDirection.Output;
 
                 // set parameter values
                 cmd.Parameters["@ownerId"].Value = ownerId;
@@ -50,8 +51,11 @@ namespace PetPolicyDataProvider
                     throw new ApplicationException("Unable to create policy due to an error accessing the data store.", ex);
                 }
 
-                var policyNumber = cmd.Parameters["@policyNumber"].Value.ToString();
-                return policyNumber;
+                return new PetPolicyDto
+                {
+                    PolicyId = int.Parse(cmd.Parameters["@policyId"].Value.ToString()),
+                    PolicyNumber = cmd.Parameters["@policyNumber"].Value.ToString()
+                };
             }
 
         }
@@ -88,6 +92,31 @@ namespace PetPolicyDataProvider
                 };
                 
             }
+        }
+
+        public override PetOwnerDto GetOwnerById(int ownerId)
+        {
+            var queryString =
+                $"SELECT * from Owner WHERE OwnerId = {ownerId}";
+            var adapter = new SqlDataAdapter(queryString, _sqlConnection);
+            var ds = new DataSet();
+            adapter.Fill(ds, "Owner");
+
+            var petOwnerData = ds.Tables[0].AsEnumerable()
+                .Select
+                (
+                    dr =>
+                    {
+                        var dto = new PetOwnerDto
+                        {
+                            OwnerName = dr.Field<string>("OwnerName"),
+                            CountryId = dr.Field<int>("CountryId"),
+                            OwnerId = dr.Field<int>("OwnerId")
+                        };
+                        return dto;
+                    }).ToList()
+                    .FirstOrDefault();
+            return petOwnerData;
         }
 
         public override PetDto AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth)

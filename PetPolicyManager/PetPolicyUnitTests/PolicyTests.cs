@@ -31,7 +31,7 @@ namespace PetPolicyUnitTests
             GivenACountryCode("USA");
             GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
-            ThenPolicyExists();
+            ThenPolicyIsCreated();
         }
 
         [Test]
@@ -230,9 +230,11 @@ namespace PetPolicyUnitTests
             Assert.That(() => WhenEnrollingAPolicy(), Throws.Exception);
         }
 
-        private static void ThenPolicyExists()
+        private static void ThenPolicyIsCreated()
         {
             Assert.That(_petPolicy, Is.Not.Null);
+            Assert.That(_petPolicy.PolicyId, Is.Not.Null);
+            Assert.That(_petPolicy.PolicyNumber, Is.Not.Null.Or.Empty);
         }
 
 

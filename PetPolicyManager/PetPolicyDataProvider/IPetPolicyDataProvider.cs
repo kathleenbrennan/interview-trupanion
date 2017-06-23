@@ -6,8 +6,9 @@ namespace PetPolicyDataProvider
 {
     public interface IPetPolicyDataProvider
     {
-        string GeneratePolicyNumber(string countryCode, int ownerId);
+        PetPolicyDto EnrollPolicy(string countryCode, int ownerId);
         PetOwnerDto RegisterOwner(string countryCode, string ownerName);
+        PetOwnerDto GetOwnerById(int ownerId);
         PetDto AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth);
         List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryList();
         List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListById(int policyId);

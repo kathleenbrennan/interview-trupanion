@@ -6,9 +6,13 @@ namespace PetPolicyDataProvider
 {
     public class PetPolicyDataProviderDummy : PetPolicyDataProviderAbstract
     {
-        public override string GeneratePolicyNumber(string countryCode, int ownerId)
+        public override PetPolicyDto EnrollPolicy(string countryCode, int ownerId)
         {
-            return countryCode + "1234567890";
+            return new PetPolicyDto
+            {
+                PolicyNumber = countryCode + "1234567890",
+                PolicyId = 999
+            };
         }
 
         public override PetOwnerDto RegisterOwner(string countryCode, string ownerName)
@@ -20,6 +24,16 @@ namespace PetPolicyDataProvider
                 OwnerName = ownerName
             };
 
+        }
+
+        public override PetOwnerDto GetOwnerById(int ownerId)
+        {
+            return new PetOwnerDto
+            {
+                CountryId = 3,
+                OwnerId = ownerId,
+                OwnerName = "Felix Mendelssohn"
+            };
         }
 
         public override PetDto AddPet(int ownerId, string petName, int speciesId, string breedName, DateTime petDateOfBirth)

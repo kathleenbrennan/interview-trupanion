@@ -56,7 +56,7 @@ namespace PetPolicyLibrary
 
         public class PetPolicy : IPetPolicy
         {
-
+            public int PolicyId { get; set; }
             public string PolicyNumber { get; set; }
 
             private PetPolicy()
@@ -67,13 +67,9 @@ namespace PetPolicyLibrary
             internal PetPolicy(string countryCode, int ownerId)
             {
                 var provider = DataProviderFactory.GetDataProvider();
-                var dto = new PetPolicyDto();
-
-                dto.PolicyNumber = provider.GeneratePolicyNumber(countryCode, ownerId);
-
+                var dto = provider.EnrollPolicy(countryCode, ownerId);
+                PolicyId = dto.PolicyId;
                 PolicyNumber = dto.PolicyNumber;
-                //todo: in a real system, you'd probably want 
-                //  to get the id of the policy in case you wanted to do other things with it
             }
         }
 

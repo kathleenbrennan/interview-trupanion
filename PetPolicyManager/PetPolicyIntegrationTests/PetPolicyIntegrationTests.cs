@@ -28,6 +28,10 @@ namespace PetPolicyIntegrationTests
         private static DateTime? _petPolicyAddDate;
         private static DateTime? _petPolicyRemoveDate;
 
+        //NOTE: in a production environment,
+        // we would want these tests to run their own data setup and cleanup
+        // to ensure that the data is in a reproducible, predictable form
+        // and that the tests didn't leave inconsistent data behind
         #region Tests
         [Test]
         public static void CanCreateNewPolicyWithCountryCode()
@@ -35,7 +39,7 @@ namespace PetPolicyIntegrationTests
             GivenACountryCode("USA");
             GivenAnOwnerId(1);
             WhenEnrollingAPolicy();
-            ThenPolicyExists();
+            ThenPolicyIsCreated();
         }
 
         [Test]
@@ -85,7 +89,7 @@ namespace PetPolicyIntegrationTests
         [Test]
         public static void CanGetPolicyAndPetSummary()
         {
-            var policyId = 3;
+            var policyId = 8;
             GivenAPolicy(policyId);
             WhenRetrievingPolicyAndPetSummary();
             ThenPolicyAndPetSummaryHasData(policyId);
@@ -194,9 +198,11 @@ namespace PetPolicyIntegrationTests
 
         #region Thens
 
-        private static void ThenPolicyExists()
+        private static void ThenPolicyIsCreated()
         {
             Assert.That(_petPolicy, Is.Not.Null);
+            Assert.That(_petPolicy.PolicyId, Is.Not.Null);
+            Assert.That(_petPolicy.PolicyNumber, Is.Not.Null.Or.Empty);
         }
 
         private static void ThenCreatingPolicyIsNotPossible()

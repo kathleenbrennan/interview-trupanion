@@ -16,6 +16,11 @@ namespace PetPolicyLibrary
         {
             return new Owner(countryCode, ownerName);
         }
+
+        public static IOwner GetOwner(int ownerId)
+        {
+            return new Owner(ownerId);
+        }
     }
     public class Owner : IOwner
     {
@@ -28,7 +33,29 @@ namespace PetPolicyLibrary
             //hide constructor so unable to create without initialization 
         }
 
+        //get owner
+        internal Owner(int ownerId)
+        {
+            var provider = GetProvider();
+            PetOwnerDto dto = provider.GetOwnerById(ownerId);
+            OwnerId = dto.OwnerId;
+            OwnerName = dto.OwnerName;
+            CountryId = dto.CountryId;
+        }
+
+        //create owner
         internal Owner(string countryCode, string ownerName)
+        {
+            var provider = GetProvider();
+            var dto = new PetOwnerDto();
+            dto = provider.RegisterOwner(countryCode, ownerName);
+
+            OwnerId = dto.OwnerId;
+            OwnerName = dto.OwnerName;
+            CountryId = dto.CountryId;
+        }
+
+        private static IPetPolicyDataProvider GetProvider()
         {
             //use dependency injection to determine 
             //  whether or not to use database
@@ -42,14 +69,7 @@ namespace PetPolicyLibrary
 
             IPetPolicyDataProvider provider =
                 PetPolicyDataProviderFactory.GetProvider(useDatabase: useDatabase);
-            var dto = new PetOwnerDto();
-            dto = provider.RegisterOwner(countryCode, ownerName);
-
-            OwnerId = dto.OwnerId;
-            OwnerName = dto.OwnerName;
-            CountryId = dto.CountryId;
+            return provider;
         }
-
-
     }
 }

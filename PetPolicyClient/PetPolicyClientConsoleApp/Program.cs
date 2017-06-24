@@ -58,18 +58,13 @@ namespace PetPolicyClientConsoleApp
                         var secondOwnerUri = CreateOwner(secondOwnerName).Result;
                         _secondOwnerId = _ownerId;
                         var secondPolicyUri = EnrollPolicyForOwner(_secondOwnerId).Result;
+
                         MovePetsBetweenOwners(_firstOwnerId, _secondOwnerId);
 
-                        Console.WriteLine("Previous owner's policy");
-                        var firstPolicyAndOwnerSummary = await GetPolicyAndOwnerSummaryAsync(policyUri.PathAndQuery);
-                        ShowPolicyAndOwnerSummary(firstPolicyAndOwnerSummary);
                         Console.WriteLine("Previous owner's policy and pets");
                         var firstPolicyAndPetsSummary = await GetPolicyAndPetsSummaryAsync(firstPolicyUri.PathAndQuery);
                         ShowPolicyAndPetsSummary(firstPolicyAndPetsSummary);
 
-                        Console.WriteLine("New owner's policy");
-                        var secondPolicyAndOwnerSummary = await GetPolicyAndOwnerSummaryAsync(secondPolicyUri.PathAndQuery);
-                        ShowPolicyAndOwnerSummary(secondPolicyAndOwnerSummary);
                         Console.WriteLine("New owner's policy and pets");
                         var secondPolicyAndPetsSummary = await GetPolicyAndPetsSummaryAsync(secondPolicyUri.PathAndQuery);
                         ShowPolicyAndPetsSummary(secondPolicyAndPetsSummary);
@@ -130,7 +125,7 @@ namespace PetPolicyClientConsoleApp
             var policyModel = response.Content.ReadAsAsync<PolicyModel>().Result;
             _policyId = policyModel.PolicyId;
             _policyNumber = policyModel.PolicyNumber;
-            Console.WriteLine($"Policy {_policyNumber} Created.  Resource at {response.Headers.Location}");
+            Console.WriteLine($"Policy {_policyNumber} Created with Policy ID {_policyId}.  Resource at {response.Headers.Location}");
             // Return the URI of the created resource.
             return response.Headers.Location;
         }
@@ -239,14 +234,18 @@ namespace PetPolicyClientConsoleApp
                                   $"\tSpeciesName: {summary.SpeciesName}" +
                                   $"\tBreedName: {summary.BreedName}" +
                                   $"\tPetDateOfBirth: {summary.PetDateOfBirth.Date}" +
-                                  $"\tAddToPolicyDate: {summary.AddToPolicyDate.Date}");
+                                  $"\tAddToPolicyDate: {summary.AddToPolicyDate.Date}" +
+                                $"\tRemoveFromPolicyDate: {summary.RemoveFromPolicyDate.GetValueOrDefault()}");
 
             }
         }
 
-        private static void MovePetsBetweenOwners(int firstOwnerId, int secondOwnerId)
+        private static async void MovePetsBetweenOwners(int firstOwnerId, int secondOwnerId)
         {
-            throw new NotImplementedException();
+            var path = new Uri(_client.BaseAddress, $"/api/owner/{firstOwnerId}/pets/moveToOwner={secondOwnerId}");
+            HttpResponseMessage response = await _client.PostAsync(path,null);
+            response.EnsureSuccessStatusCode();
+
         }
     }
 }

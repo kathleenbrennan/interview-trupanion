@@ -15,8 +15,9 @@ namespace PetPolicyDataProvider
         public abstract List<PolicyAndOwnerSummaryDto> GetPolicyAndOwnerSummaryListByOwner(int ownerId);
         public abstract DateTime? AddPetToPolicy(int petId, int policyId);
         public abstract DateTime? RemovePetFromPolicy(int petId, int policyId);
-        public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList();
+        public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByOwnerId(int ownerId);
         public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyId(int policyId);
         public abstract List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId);
+        public abstract void MovePetsBetweenOwners(int prevOwnerId, int newOwnerId);
     }
 }

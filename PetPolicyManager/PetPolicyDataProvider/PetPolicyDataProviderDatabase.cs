@@ -205,22 +205,33 @@ namespace PetPolicyDataProvider
             }
         }
 
-        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList()
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByOwnerId(int ownerId)
         {
-            var queryString = "SELECT * from vwPolicyAndPets AND RemoveFromPolicyDate IS NULL";
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE OwnerId = {ownerId}";
             return GetPolicyAndPetSummaryDtos(queryString);
         }
 
         public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyId(int policyId)
         {
-            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId}  AND RemoveFromPolicyDate IS NULL";
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId}";
             return GetPolicyAndPetSummaryDtos(queryString);
         }
 
         public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId)
         {
-            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId} AND PetId = {petId} AND RemoveFromPolicyDate IS NULL";
+            var queryString = $"SELECT * from vwPolicyAndPets WHERE PolicyId = {policyId} AND PetId = {petId}";
             return GetPolicyAndPetSummaryDtos(queryString);
+        }
+
+        public override void MovePetsBetweenOwners(int prevOwnerId, int newOwnerId)
+        {
+            using (var cmd = new SqlCommand("dbo.spPetsMoveBetweenOwners", _sqlConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@prevOwnerId", prevOwnerId);
+                cmd.Parameters.AddWithValue("@newOwnerId", newOwnerId);
+                cmd.ExecuteNonQuery();
+            }
         }
 
 
@@ -273,18 +284,22 @@ namespace PetPolicyDataProvider
                         {
                             PolicyId = dr.Field<int>("PolicyId"),
                             PolicyNumber = dr.Field<string>("PolicyNumber"),
-                            PetId = dr.Field<int>("PetId"),
-                            PetName = dr.Field<string>("PetName"),
-                            PetDateOfBirth = dr.Field<DateTime>("PetDateOfBirth"),
-                            SpeciesId = dr.Field<int>("SpeciesId"),
-                            SpeciesName = dr.Field<string>("SpeciesName"),
-                            BreedId = dr.Field<int>("BreedId"),
-                            BreedName = dr.Field<string>("BreedName"),
-                            AddToPolicyDate = dr.Field<DateTime>("AddToPolicyDate"),
-                            RemoveFromPolicyDate = dr.Field<DateTime?>("RemoveFromPolicyDate"),
-
-
+                            OwnerId = dr.Field<int>("OwnerId"),
+                            OwnerName = dr.Field<string>("OwnerName"),
                         };
+
+                        //check if pets are null
+                        if (!dr.Field<int?>("PetId").HasValue) return dto;
+
+                        dto.PetId = dr.Field<int>("PetId");
+                        dto.PetName = dr.Field<string>("PetName");
+                        dto.SpeciesId = dr.Field<int>("SpeciesId");
+                        dto.SpeciesName = dr.Field<string>("SpeciesName");
+                        dto.BreedId = dr.Field<int>("BreedId");
+                        dto.BreedName = dr.Field<string>("BreedName");
+                        dto.PetDateOfBirth = dr.Field<DateTime>("PetDateOfBirth");
+                        dto.AddToPolicyDate = dr.Field<DateTime>("AddToPolicyDate");
+                        dto.RemoveFromPolicyDate = dr.Field<DateTime?>("RemoveFromPolicyDate");
                         return dto;
                     }).ToList();
             return list;

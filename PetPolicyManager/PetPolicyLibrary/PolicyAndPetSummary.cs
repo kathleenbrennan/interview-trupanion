@@ -7,6 +7,8 @@ namespace PetPolicyLibrary
     {
         public int PolicyId { get; set; }
         public string PolicyNumber { get; set; }
+        public int OwnerId { get; set; }
+        public string OwnerName { get; set; }
         public int PetId { get; set; }
         public string PetName { get; set; }
         public DateTime PetDateOfBirth { get; set; }

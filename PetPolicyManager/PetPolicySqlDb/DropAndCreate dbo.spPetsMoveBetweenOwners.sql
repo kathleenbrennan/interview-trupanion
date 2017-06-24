@@ -69,8 +69,22 @@ BEGIN
 		BREAK
 
 	UPDATE PetPolicy
-	SET PolicyId = @newPolicyId
-	WHERE PetId = @petId
+	SET RemoveFromPolicyDate = getdate()
+	WHERE PolicyId = @prevPolicyId
+	AND PetId = @petId
+
+	INSERT INTO PetPolicy
+	(
+		PetId,
+		PolicyId,
+		AddToPolicyDate
+	)
+	VALUES
+	(
+		@petId,
+		@newPolicyId,
+		getdate()
+	)
 
 END
 

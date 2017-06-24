@@ -27,6 +27,12 @@ namespace PetPolicyService.Controllers
             return PetPolicyFactory.GetPolicyAndOwnerSummaryListByOwner(ownerId);
         }
 
+        [Route("api/owner/{ownerId}/pets")]
+        public List<IPolicyAndPetSummary> GetPoliciesAndPetsByOwner(int ownerId)
+        {
+            return PetPolicyFactory.GetPolicyAndPetSummaryListByOwnerId(ownerId);
+        }
+
         //PUT: api/Owner/
         public IHttpActionResult Put([FromBody] OwnerModel owner)
         {
@@ -67,11 +73,20 @@ namespace PetPolicyService.Controllers
             }
         }
 
-        [Route("api/owner/{ownerId}/moveToOwner={newOwnerId}")]
+        [Route("api/owner/{ownerId}/pets/moveToOwner={newOwnerId}")]
         public IHttpActionResult Post([FromUri] int ownerId, [FromUri] int newOwnerId)
         {
-            //todo: implement
-            return Ok();
+            var owner = OwnerFactory.GetOwner(ownerId);
+            try
+            {
+                owner.MovePetsToNewOwner(newOwnerId);
+                //return URI /api/policy/8/pets
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }

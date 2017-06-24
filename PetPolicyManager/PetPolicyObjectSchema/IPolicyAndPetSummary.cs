@@ -11,6 +11,8 @@ namespace PetPolicyObjectSchema
         int PetId { get; set; }
         string PetName { get; set; }
         int PolicyId { get; set; }
+        int OwnerId { get; set; }
+        string OwnerName { get; set; }
         string PolicyNumber { get; set; }
         DateTime? RemoveFromPolicyDate { get; set; }
         int SpeciesId { get; set; }

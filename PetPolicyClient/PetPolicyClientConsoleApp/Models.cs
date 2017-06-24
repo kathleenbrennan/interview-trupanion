@@ -25,6 +25,8 @@ namespace PetPolicyClientConsoleApp
         public string BreedName { get; set; }
         public DateTime PetDateOfBirth { get; set; }
         public int PetId { get; set; }
+        public int OwnerId { get; set; }
+        public string OwnerName { get; set; }
         public string PetName { get; set; }
         public int PolicyId { get; set; }
         public string PolicyNumber { get; set; }

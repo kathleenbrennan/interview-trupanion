@@ -18,6 +18,8 @@ GO
 	SELECT  
 		pol.PolicyId,
 		pol.PolicyNumber,
+		o.OwnerId,
+		o.OwnerName,
 		p.PetId,
 		p.PetName,
 		p.PetDateOfBirth,
@@ -29,6 +31,8 @@ GO
 		pp.RemoveFromPolicyDate
 
 	FROM Policy pol
+	INNER JOIN Owner o
+	ON pol.OwnerId = o.OwnerId
 	LEFT JOIN PetPolicy pp
 	ON pol.PolicyId = pp.PolicyId
 	LEFT JOIN Pet p
@@ -37,3 +41,4 @@ GO
 	ON p.BreedId = b.BreedId
 	LEFT JOIN Species s
 	ON b.SpeciesId = s.SpeciesId
+	

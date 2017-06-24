@@ -79,7 +79,7 @@ namespace PetPolicyDataProvider
             return DateTime.Now;
         }
 
-        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryList()
+        public override List<PolicyAndPetSummaryDto> GetPolicyAndPetSummaryListByOwnerId(int ownerId)
         {
             var list = new List<PolicyAndPetSummaryDto> { new PolicyAndPetSummaryDto { PetId = 1 } };
             return list;
@@ -95,6 +95,11 @@ namespace PetPolicyDataProvider
         {
             var list = new List<PolicyAndPetSummaryDto> { new PolicyAndPetSummaryDto { PetId = 1 } };
             return list;
+        }
+
+        public override void MovePetsBetweenOwners(int prevOwnerId, int newOwnerId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

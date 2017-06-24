@@ -22,6 +22,7 @@ namespace PetPolicyLibrary
             return new Owner(ownerId);
         }
     }
+
     public class Owner : IOwner
     {
         public int OwnerId { get; }
@@ -70,6 +71,12 @@ namespace PetPolicyLibrary
             IPetPolicyDataProvider provider =
                 PetPolicyDataProviderFactory.GetProvider(useDatabase: useDatabase);
             return provider;
+        }
+
+        public void MovePetsToNewOwner(int newOwnerId)
+        {
+            var provider = GetProvider();
+            provider.MovePetsBetweenOwners(this.OwnerId, newOwnerId);
         }
     }
 }

@@ -39,10 +39,6 @@ namespace PetPolicyLibrary
             return PolicyAndOwnerSummaryList.GetPolicyAndOwnerSummaryListById(policyId);
         }
 
-        public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByPolicyId()
-        {
-            return PolicyAndPetSummaryList.GetPolicyAndPetSummaryList();
-        }
 
         public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByPolicyId(int policyId)
         {
@@ -52,6 +48,12 @@ namespace PetPolicyLibrary
         public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByPolicyIdAndPetId(int policyId, int petId)
         {
             return PolicyAndPetSummaryList.GetPolicyAndPetSummaryList(policyId, petId);
+        }
+
+
+        public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByOwnerId(int ownerId)
+        {
+            return PolicyAndPetSummaryList.GetPolicyAndPetSummaryListByOwnerId(ownerId);
         }
 
         public class PetPolicy : IPetPolicy

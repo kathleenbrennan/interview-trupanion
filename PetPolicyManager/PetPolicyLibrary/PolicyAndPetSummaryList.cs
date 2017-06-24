@@ -6,16 +6,6 @@ namespace PetPolicyLibrary
 {
     public class PolicyAndPetSummaryList : List<IPolicyAndPetSummary>
     {
-        public static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryList()
-        {
-            var provider = DataProviderFactory.GetDataProvider();
-            var dtoList = provider.GetPolicyAndPetSummaryList();
-
-            var summaryList = PopulatePolicyAndPetSummaries(dtoList);
-            return summaryList;
-
-        }
-
         internal static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryList(int policyId)
         {
             var provider = DataProviderFactory.GetDataProvider();
@@ -30,6 +20,14 @@ namespace PetPolicyLibrary
             var provider = DataProviderFactory.GetDataProvider();
             var dtoList = provider.GetPolicyAndPetSummaryListByPolicyIdAndPetId(policyId, petId);
 
+            var summaryList = PopulatePolicyAndPetSummaries(dtoList);
+            return summaryList;
+        }
+
+        internal static List<IPolicyAndPetSummary> GetPolicyAndPetSummaryListByOwnerId(int ownerId)
+        {
+            var provider = DataProviderFactory.GetDataProvider();
+            var dtoList = provider.GetPolicyAndPetSummaryListByOwnerId(ownerId);
             var summaryList = PopulatePolicyAndPetSummaries(dtoList);
             return summaryList;
         }

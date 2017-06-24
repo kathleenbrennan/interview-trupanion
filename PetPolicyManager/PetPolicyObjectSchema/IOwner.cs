@@ -5,5 +5,6 @@
         int CountryId { get; }
         int OwnerId { get; }
         string OwnerName { get; }
+        void MovePetsToNewOwner(int newOwnerId);
     }
 }

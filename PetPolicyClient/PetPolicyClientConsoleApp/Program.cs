@@ -10,7 +10,7 @@ namespace PetPolicyClientConsoleApp
 {
     internal class Program
     {
-        private static readonly HttpClient _client = new HttpClient();
+        private static HttpClient _client;
         private static string _countryCode;
         private static int _ownerId;
         private static int _firstOwnerId;
@@ -25,7 +25,7 @@ namespace PetPolicyClientConsoleApp
 
         private static async Task RunAsync()
         {
-            _client.BaseAddress = new Uri("http://localhost:62792/");
+            _client = new HttpClient {BaseAddress = new Uri("http://localhost:62792/")};
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -47,7 +47,7 @@ namespace PetPolicyClientConsoleApp
 
                     //move pets if requested
                     Console.WriteLine("Do you want to move pets to another owner? Y/N");
-                    string movePetsYN = Console.ReadLine().ToUpper();
+                    string movePetsYN = Console.ReadLine()?.ToUpper();
                     if(movePetsYN=="Y")
                     {
                         var secondOwnerName = ReadOwnerName();
@@ -104,7 +104,7 @@ namespace PetPolicyClientConsoleApp
                 OwnerName = ownerName,
                 CountryIso3LetterCode = _countryCode
             };
-            HttpResponseMessage response = await _client.PutAsJsonAsync(path, ownerModel);
+            var response = await _client.PutAsJsonAsync(path, ownerModel);
             response.EnsureSuccessStatusCode();
             _ownerId = response.Content.ReadAsAsync<OwnerModel>().Result.OwnerId;
             Console.WriteLine($"Owner Created. Resource at {response.Headers.Location}");
@@ -116,7 +116,8 @@ namespace PetPolicyClientConsoleApp
         {
             Console.WriteLine("Creating Policy for owner. Please wait.");
             var path = new Uri(_client.BaseAddress, $"/api/owner/{ownerId}/policy/countryCode={_countryCode}");
-            HttpResponseMessage response = await _client.PostAsync(path,null);
+            var response = await _client.PostAsync(path,null);
+            response.EnsureSuccessStatusCode();
             var policyModel = response.Content.ReadAsAsync<PolicyModel>().Result;
             _policyId = policyModel.PolicyId;
             _policyNumber = policyModel.PolicyNumber;
@@ -132,7 +133,7 @@ namespace PetPolicyClientConsoleApp
             var formatter = new JsonMediaTypeFormatter();
             formatter.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All;
 
-            HttpResponseMessage response = await _client.GetAsync(path);
+            var response = await _client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
                 policyAndOwnerSummary = await response.Content.ReadAsAsync<IEnumerable<PolicyAndOwnerSummary>>();

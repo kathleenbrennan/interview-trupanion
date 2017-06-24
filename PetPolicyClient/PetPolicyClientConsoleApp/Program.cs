@@ -12,8 +12,9 @@ namespace PetPolicyClientConsoleApp
     {
         private static readonly HttpClient _client = new HttpClient();
         private static string _countryCode;
-        private static string _ownerName;
         private static int _ownerId;
+        private static int _firstOwnerId;
+        private static int _secondOwnerId;
         private static int _policyId;
         private static string _policyNumber;
 
@@ -32,17 +33,48 @@ namespace PetPolicyClientConsoleApp
             {
                 if (GetCountryCode())
                 {
-                    _ownerName = GetOwnerName();
-                    var ownerUri = CreateOwner().Result;
+                    var firstOwnerName = ReadOwnerName();
+                    var ownerUri = CreateOwner(firstOwnerName).Result;
+                    _firstOwnerId = _ownerId;
 
-                    var policyUri = EnrollPolicyForOwner().Result;
+                    var policyUri = EnrollPolicyForOwner(_firstOwnerId).Result;
                     var policyAndOwnerSummary = await GetPolicyAndOwnerSummaryAsync(policyUri.PathAndQuery);
                     ShowPolicyAndOwnerSummary(policyAndOwnerSummary);
 
-                    var policyAndPetsUri = AddPetsToPolicy().Result;
-                    var policyAndPetsSummary = await GetPolicyAndPetsSummaryAsync(policyAndPetsUri.PathAndQuery);
+                    var firstPolicyUri = AddPetsToPolicy(_firstOwnerId).Result;
+                    var policyAndPetsSummary = await GetPolicyAndPetsSummaryAsync(firstPolicyUri.PathAndQuery);
                     ShowPolicyAndPetsSummary(policyAndPetsSummary);
-                }
+
+                    //move pets if requested
+                    Console.WriteLine("Do you want to move pets to another owner? Y/N");
+                    string movePetsYN = Console.ReadLine().ToUpper();
+                    if(!(movePetsYN=="Y" || movePetsYN == "N"))
+                    {
+                        Console.WriteLine("Invalid response.  Finishing.");
+                    }
+                    else
+                    {
+                        var secondOwnerName = ReadOwnerName();
+                        var secondOwnerUri = CreateOwner(secondOwnerName).Result;
+                        _secondOwnerId = _ownerId;
+                        var secondPolicyUri = EnrollPolicyForOwner(_secondOwnerId).Result;
+                        MovePetsBetweenOwners(_firstOwnerId, _secondOwnerId);
+
+                        Console.WriteLine("Previous owner's policy");
+                        var firstPolicyAndOwnerSummary = await GetPolicyAndOwnerSummaryAsync(policyUri.PathAndQuery);
+                        ShowPolicyAndOwnerSummary(firstPolicyAndOwnerSummary);
+                        Console.WriteLine("Previous owner's policy and pets");
+                        var firstPolicyAndPetsSummary = await GetPolicyAndPetsSummaryAsync(firstPolicyUri.PathAndQuery);
+                        ShowPolicyAndPetsSummary(firstPolicyAndPetsSummary);
+
+                        Console.WriteLine("New owner's policy");
+                        var secondPolicyAndOwnerSummary = await GetPolicyAndOwnerSummaryAsync(secondPolicyUri.PathAndQuery);
+                        ShowPolicyAndOwnerSummary(secondPolicyAndOwnerSummary);
+                        Console.WriteLine("New owner's policy and pets");
+                        var secondPolicyAndPetsSummary = await GetPolicyAndPetsSummaryAsync(secondPolicyUri.PathAndQuery);
+                        ShowPolicyAndPetsSummary(secondPolicyAndPetsSummary);
+                    }
+                } 
             }
             catch (Exception e)
             {
@@ -67,22 +99,22 @@ namespace PetPolicyClientConsoleApp
             return true;
         }
 
-        private static string GetOwnerName()
+        private static string ReadOwnerName()
         {
             Console.WriteLine($"Enter the name of the pet owner.");
             return Console.ReadLine();
         }
 
-        private static async Task<Uri> CreateOwner()
+        private static async Task<Uri> CreateOwner(string ownerName)
         {
             Console.WriteLine("Creating Owner. Please wait.");
             var path = new Uri(_client.BaseAddress, "/api/owner");
             OwnerModel ownerModel = new OwnerModel
             {
-                OwnerName = _ownerName,
+                OwnerName = ownerName,
                 CountryIso3LetterCode = _countryCode
             };
-            HttpResponseMessage response = await _client.PostAsJsonAsync(path, ownerModel);
+            HttpResponseMessage response = await _client.PutAsJsonAsync(path, ownerModel);
             response.EnsureSuccessStatusCode();
             _ownerId = response.Content.ReadAsAsync<OwnerModel>().Result.OwnerId;
             Console.WriteLine($"Owner Created. Resource at {response.Headers.Location}");
@@ -90,11 +122,11 @@ namespace PetPolicyClientConsoleApp
             return response.Headers.Location;
         }
 
-        private static async Task<Uri> EnrollPolicyForOwner()
+        private static async Task<Uri> EnrollPolicyForOwner(int ownerId)
         {
             Console.WriteLine("Creating Policy for owner. Please wait.");
-            var path = new Uri(_client.BaseAddress, $"/api/owner/{_ownerId}/policy/countryCode={_countryCode}");
-            HttpResponseMessage response = await _client.PutAsync(path,null);
+            var path = new Uri(_client.BaseAddress, $"/api/owner/{ownerId}/policy/countryCode={_countryCode}");
+            HttpResponseMessage response = await _client.PostAsync(path,null);
             var policyModel = response.Content.ReadAsAsync<PolicyModel>().Result;
             _policyId = policyModel.PolicyId;
             _policyNumber = policyModel.PolicyNumber;
@@ -118,7 +150,7 @@ namespace PetPolicyClientConsoleApp
             return policyAndOwnerSummary.FirstOrDefault();
         }
 
-        private static async Task<Uri> AddPetsToPolicy()
+        private static async Task<Uri> AddPetsToPolicy(int ownerId)
         {
             Console.WriteLine($"Adding pets to policy #{_policyNumber}");
             Console.WriteLine("How many pets to add to policy?");
@@ -143,7 +175,7 @@ namespace PetPolicyClientConsoleApp
                     DateTime petDateOfBirth = DateTime.Parse(Console.ReadLine());
                     var petModel = new PetModel
                     {
-                        OwnerId = _ownerId,
+                        OwnerId = ownerId,
                         PetName = petName,
                         Species = species,
                         BreedName = breedName,
@@ -168,7 +200,7 @@ namespace PetPolicyClientConsoleApp
         {
             Console.WriteLine("Adding pet. Please wait.");
             var path = new Uri(_client.BaseAddress, $"/api/policy/{_policyId}/pets");
-            HttpResponseMessage response = await _client.PutAsJsonAsync(path, petModel);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(path, petModel);
             int petId = response.Content.ReadAsAsync<PetModel>().Result.PetId;
             var location = response.Headers.Location;
             Console.WriteLine($"Pet {petId} Created.  Resource at {location}");
@@ -210,6 +242,11 @@ namespace PetPolicyClientConsoleApp
                                   $"\tAddToPolicyDate: {summary.AddToPolicyDate.Date}");
 
             }
+        }
+
+        private static void MovePetsBetweenOwners(int firstOwnerId, int secondOwnerId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

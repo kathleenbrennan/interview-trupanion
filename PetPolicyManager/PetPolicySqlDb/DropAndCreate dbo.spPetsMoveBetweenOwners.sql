@@ -28,6 +28,8 @@ but that does not meet the requirement of moving pets one at a time
 */
 
 DECLARE @petId int
+DECLARE @prevPolicyId int
+DECLARE @newPolicyId int
 DECLARE @err int
 
 DECLARE pet_cursor CURSOR STATIC LOCAL
@@ -49,6 +51,27 @@ BEGIN
    SELECT @err = @@error
    IF @err <> 0
       BREAK
+
+	SELECT TOP 1 @prevPolicyId = PolicyId
+	FROM Policy
+	WHERE PolicyCancellationDate IS NULL
+	AND OwnerId = @prevOwnerId
+	ORDER BY PolicyEnrollmentDate DESC
+	IF @@rowcount = 0 --no active policy found for previous owner
+		BREAK
+
+	SELECT TOP 1 @newPolicyId = PolicyId
+	FROM Policy
+	WHERE PolicyCancellationDate IS NULL
+	AND OwnerId = @newOwnerId
+	ORDER BY PolicyEnrollmentDate DESC
+	IF @@rowcount = 0 --no active policy found for new owner
+		BREAK
+
+	UPDATE PetPolicy
+	SET PolicyId = @newPolicyId
+	WHERE PetId = @petId
+
 END
 
 DEALLOCATE pet_cursor

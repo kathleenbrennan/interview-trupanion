@@ -27,8 +27,8 @@ namespace PetPolicyService.Controllers
             return PetPolicyFactory.GetPolicyAndOwnerSummaryListByOwner(ownerId);
         }
 
-        //POST: api/Owner/
-        public IHttpActionResult Post([FromBody]OwnerModel owner)
+        //PUT: api/Owner/
+        public IHttpActionResult Put([FromBody] OwnerModel owner)
         {
             string ownerName = owner.OwnerName;
             string countryCode = owner.CountryIso3LetterCode;
@@ -48,16 +48,18 @@ namespace PetPolicyService.Controllers
         }
 
         [Route("api/owner/{ownerId}/policy/countryCode={countryCode}")]
-        public IHttpActionResult Put([FromUri]int ownerId, [FromUri]string countryCode)
+        public IHttpActionResult Post([FromUri] int ownerId, [FromUri] string countryCode)
         {
             try
             {
                 var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
+
+                //new location should be /api/policy/{policyId}/pets
                 string requestUriAbsoluteUri = Request.RequestUri.AbsoluteUri;
                 var indexOf = requestUriAbsoluteUri.LastIndexOf("/", StringComparison.Ordinal);
-
                 string location = requestUriAbsoluteUri.Substring(0, indexOf); //remove countryCode
-                return Created(location, new PolicyModel {PolicyId =policy.PolicyId, PolicyNumber = policy.PolicyNumber});
+                return Created(location,
+                    new PolicyModel {PolicyId = policy.PolicyId, PolicyNumber = policy.PolicyNumber});
             }
             catch (Exception ex)
             {
@@ -65,5 +67,11 @@ namespace PetPolicyService.Controllers
             }
         }
 
+        [Route("api/owner/{ownerId}/moveToOwner={newOwnerId}")]
+        public IHttpActionResult Post([FromUri] int ownerId, [FromUri] int newOwnerId)
+        {
+            //todo: implement
+            return Ok();
+        }
     }
 }

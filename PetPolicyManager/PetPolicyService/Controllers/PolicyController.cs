@@ -36,12 +36,6 @@ namespace PetPolicyService.Controllers
             return PetPolicyFactory.GetPolicyAndPetSummaryListByPolicyIdAndPetId(policyId, petId);
         }
 
-
-        //// POST: api/Policy
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
         /// <summary>
         /// Adds a pet to the policy
         /// </summary>
@@ -49,7 +43,7 @@ namespace PetPolicyService.Controllers
         /// <param name="petModel">JSON object with the properties of the pet.</param>
         /// <returns>Http result</returns>
         [Route("api/policy/{policyId}/pets")]
-        public IHttpActionResult Put([FromUri]int policyId, [FromBody]PetModel petModel)
+        public IHttpActionResult Post([FromUri]int policyId, [FromBody]PetModel petModel)
         {
             int speciesId;
             switch (petModel.Species)

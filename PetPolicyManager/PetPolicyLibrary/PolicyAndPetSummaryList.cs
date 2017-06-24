@@ -41,6 +41,8 @@ namespace PetPolicyLibrary
                     {
                         PolicyId = dto.PolicyId,
                         PolicyNumber = dto.PolicyNumber,
+                        OwnerId = dto.OwnerId,
+                        OwnerName = dto.OwnerName,
                         PetId = dto.PetId,
                         PetName = dto.PetName,
                         PetDateOfBirth = dto.PetDateOfBirth,

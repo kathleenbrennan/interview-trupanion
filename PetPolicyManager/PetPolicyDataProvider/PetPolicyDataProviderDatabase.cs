@@ -284,9 +284,10 @@ namespace PetPolicyDataProvider
                         {
                             PolicyId = dr.Field<int>("PolicyId"),
                             PolicyNumber = dr.Field<string>("PolicyNumber"),
-                            OwnerId = dr.Field<int>("OwnerId"),
-                            OwnerName = dr.Field<string>("OwnerName"),
                         };
+
+                        dto.OwnerId = dr.Field<int>("OwnerId");
+                        dto.OwnerName = dr.Field<string>("OwnerName");
 
                         //check if pets are null
                         if (!dr.Field<int?>("PetId").HasValue) return dto;

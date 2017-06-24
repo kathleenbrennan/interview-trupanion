@@ -80,8 +80,12 @@ namespace PetPolicyService.Controllers
             try
             {
                 owner.MovePetsToNewOwner(newOwnerId);
-                //return URI /api/policy/8/pets
-                return Ok();
+                string requestUriAbsoluteUri = Request.RequestUri.AbsoluteUri;
+                var indexOf = requestUriAbsoluteUri.LastIndexOf("/", StringComparison.Ordinal);
+                string location = requestUriAbsoluteUri.Substring(0, indexOf); //remove query
+                var updatedLocation = location.Replace(ownerId.ToString(), newOwnerId.ToString());
+                //return URI /api/owner/{newOwnerId}/pets
+                return Created<object>(updatedLocation,null);
             }
             catch (Exception ex)
             {

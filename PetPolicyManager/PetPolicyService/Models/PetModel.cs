@@ -7,6 +7,7 @@ namespace PetPolicyService.Models
 {
     public class PetModel
     {
+        public int PetId { get; set; }
         public int OwnerId { get; set; }
         public string PetName { get; set; }
         public string Species { get; set; }

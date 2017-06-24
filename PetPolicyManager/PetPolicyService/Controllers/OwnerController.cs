@@ -27,6 +27,7 @@ namespace PetPolicyService.Controllers
             return PetPolicyFactory.GetPolicyAndOwnerSummaryListByOwner(ownerId);
         }
 
+        //POST: api/Owner/
         public IHttpActionResult Post([FromBody]OwnerModel owner)
         {
             string ownerName = owner.OwnerName;
@@ -52,8 +53,11 @@ namespace PetPolicyService.Controllers
             try
             {
                 var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
-                string location = Request.RequestUri + "/" + ownerId.ToString() + "/policy";
-                return Created(location, new {policyId = policy.PolicyId, policyNumber = policy.PolicyNumber});
+                string requestUriAbsoluteUri = Request.RequestUri.AbsoluteUri;
+                var indexOf = requestUriAbsoluteUri.LastIndexOf("/", StringComparison.Ordinal);
+
+                string location = requestUriAbsoluteUri.Substring(0, indexOf); //remove countryCode
+                return Created(location, new PolicyModel {PolicyId =policy.PolicyId, PolicyNumber = policy.PolicyNumber});
             }
             catch (Exception ex)
             {
@@ -61,11 +65,5 @@ namespace PetPolicyService.Controllers
             }
         }
 
-
-
-        //// DELETE: api/Owner/5
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

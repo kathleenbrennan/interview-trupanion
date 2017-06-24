@@ -46,13 +46,13 @@ namespace PetPolicyService.Controllers
         /// Adds a pet to the policy
         /// </summary>
         /// <param name="policyId">Unique identifier of the policy.</param>
-        /// <param name="pet">JSON object with the properties of the pet.</param>
+        /// <param name="petModel">JSON object with the properties of the pet.</param>
         /// <returns>Http result</returns>
         [Route("api/policy/{policyId}/pets")]
-        public IHttpActionResult Put([FromUri]int policyId, [FromBody]PetModel pet)
+        public IHttpActionResult Put([FromUri]int policyId, [FromBody]PetModel petModel)
         {
             int speciesId;
-            switch (pet.Species)
+            switch (petModel.Species)
             {
                 case "cat":
                     speciesId = 1;
@@ -70,11 +70,12 @@ namespace PetPolicyService.Controllers
                 //in a production system you would have more error checking and transactional behavior around this
                 //  so that the system didn't end up in an inconsistent state
 
-                var petId = PetPolicyFactory.AddPet(pet.OwnerId, pet.PetName, speciesId, pet.BreedName,
-                    pet.PetDateOfBirth);
+                var petId = PetPolicyFactory.AddPet(petModel.OwnerId, petModel.PetName, speciesId, petModel.BreedName,
+                    petModel.PetDateOfBirth);
+                petModel.PetId = petId;
                 PetPolicyFactory.AddPetToPolicy(petId, policyId);
                 string location = Request.RequestUri.ToString();
-                return Created(location, new {petId = petId});
+                return Created(location, petModel);
             }
             catch (Exception ex)
             {

@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Models\OwnerModel.cs" />
     <Compile Include="Models\PetModel.cs" />
+    <Compile Include="Models\PolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,7 @@ NOTE: Easy set-based implementation would be
 	SET OwnerId = @newOwnerId
 	WHERE OwnerId = @prevOwnerId
 but that does not meet the requirement of moving pets one at a time
+plus it does not handle updating their policy numbers without being more complicated
 */
 
 DECLARE @petId int
@@ -36,6 +37,40 @@ BEGIN
    SELECT @err = @@error
    IF @err <> 0
       BREAK
+	  
+	SELECT TOP 1 @prevPolicyId = PolicyId
+	FROM Policy
+	WHERE PolicyCancellationDate IS NULL
+	AND OwnerId = @prevOwnerId
+	ORDER BY PolicyEnrollmentDate DESC
+	IF @@rowcount = 0 --no active policy found for previous owner
+		BREAK
+
+	SELECT TOP 1 @newPolicyId = PolicyId
+	FROM Policy
+	WHERE PolicyCancellationDate IS NULL
+	AND OwnerId = @newOwnerId
+	ORDER BY PolicyEnrollmentDate DESC
+	IF @@rowcount = 0 --no active policy found for new owner
+		BREAK
+
+	UPDATE PetPolicy
+	SET RemoveFromPolicyDate = getdate()
+	WHERE PolicyId = @prevPolicyId
+	AND PetId = @petId
+
+	INSERT INTO PetPolicy
+	(
+		PetId,
+		PolicyId,
+		AddToPolicyDate
+	)
+	VALUES
+	(
+		@petId,
+		@newPolicyId,
+		getdate()
+	)
 END
 
 DEALLOCATE pet_cursor

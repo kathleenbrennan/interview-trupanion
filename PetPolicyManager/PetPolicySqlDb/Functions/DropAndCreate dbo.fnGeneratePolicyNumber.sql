@@ -1,4 +1,18 @@
-﻿CREATE FUNCTION [dbo].[fnGeneratePolicyNumber]
+﻿USE [PetPolicySqlDb]
+GO
+
+/****** Object: Scalar Function [dbo].[fnGeneratePolicyNumber] Script Date: 6/24/2017 4:02:04 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+DROP FUNCTION [dbo].[fnGeneratePolicyNumber];
+
+
+GO
+CREATE FUNCTION [dbo].[fnGeneratePolicyNumber]
 (
 )
 RETURNS int

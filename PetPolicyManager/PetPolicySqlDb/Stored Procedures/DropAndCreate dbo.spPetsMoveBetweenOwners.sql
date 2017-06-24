@@ -1,7 +1,7 @@
 ﻿USE [PetPolicySqlDb]
 GO
 
-/****** Object: SqlProcedure [dbo].[spPetsMoveBetweenOwners] Script Date: 6/20/2017 4:38:04 PM ******/
+/****** Object: SqlProcedure [dbo].[spPetsMoveBetweenOwners] Script Date: 6/24/2017 4:00:55 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -25,6 +25,8 @@ NOTE: Easy set-based implementation would be
 	SET OwnerId = @newOwnerId
 	WHERE OwnerId = @prevOwnerId
 but that does not meet the requirement of moving pets one at a time
+plus it would be more complex to get the policy numbers
+so you can update them too
 */
 
 DECLARE @petId int

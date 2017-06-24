@@ -1,7 +1,7 @@
 ﻿USE [PetPolicySqlDb]
 GO
 
-/****** Object: SqlProcedure [dbo].[spPolicyInsert] Script Date: 6/22/2017 7:59:32 PM ******/
+/****** Object: SqlProcedure [dbo].[spPolicyInsert] Script Date: 6/24/2017 4:01:20 PM ******/
 SET ANSI_NULLS ON
 GO
 

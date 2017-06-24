@@ -1,7 +1,7 @@
 ﻿USE [PetPolicySqlDb]
 GO
 
-/****** Object: View [dbo].[vwPolicyAndPets] Script Date: 6/24/2017 1:06:32 PM ******/
+/****** Object: View [dbo].[vwPolicyAndPets] Script Date: 6/24/2017 4:02:51 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -41,4 +41,3 @@ GO
 	ON p.BreedId = b.BreedId
 	LEFT JOIN Species s
 	ON b.SpeciesId = s.SpeciesId
-	

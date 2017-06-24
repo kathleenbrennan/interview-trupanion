@@ -202,7 +202,6 @@ GO
 CREATE PROCEDURE [dbo].[spPolicyInsert]
 	@ownerId int,
 	@countryIso3LetterCode char(3),
-	@policyId int OUTPUT,
 	@policyNumber varchar(100) = NULL OUTPUT
 AS
 BEGIN
@@ -245,7 +244,7 @@ BEGIN
 					, @countryId
 					, @ownerId
 				)
-				SET @policyId = @@IDENTITY
+
 				RETURN 0
 				END;
 		ELSE

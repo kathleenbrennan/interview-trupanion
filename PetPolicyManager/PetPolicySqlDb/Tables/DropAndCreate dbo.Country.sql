@@ -1,7 +1,7 @@
 ﻿USE [PetPolicySqlDb]
 GO
 
-/****** Object: Table [dbo].[Country] Script Date: 6/17/2017 3:48:25 PM ******/
+/****** Object: Table [dbo].[Country] Script Date: 6/24/2017 4:13:29 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -13,9 +13,9 @@ DROP TABLE [dbo].[Country];
 
 GO
 CREATE TABLE [dbo].[Country] (
-    [CountryId] int identity(1,1) PRIMARY KEY,
-    [CountryIso3LetterCode] NCHAR (3)     NOT NULL,
-    [CountryName]           VARCHAR (50) NOT NULL
+    [CountryId]             INT           IDENTITY (1, 1) PRIMARY KEY,
+    [CountryIso3LetterCode] CHAR (3)     NOT NULL,
+    [CountryName]           NVARCHAR (50) NOT NULL
 );
 
 

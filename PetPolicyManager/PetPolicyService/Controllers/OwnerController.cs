@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using PetPolicyLibrary;
 using PetPolicyObjectSchema;
@@ -37,14 +34,14 @@ namespace PetPolicyService.Controllers
         public IHttpActionResult Put([FromBody] OwnerModel owner)
         {
             string ownerName = owner.OwnerName;
-            string countryCode = owner.CountryIso3LetterCode;
+            string countryCode = owner.CountryCode;
 
             try
             {
                 var ownerDto = OwnerFactory.RegisterOwner(countryCode, ownerName);
                 int ownerId = ownerDto.OwnerId;
                 owner.OwnerId = ownerId;
-                string location = Request.RequestUri + "/" + ownerId.ToString();
+                var location = Request.RequestUri + "/" + ownerId;
                 return Created(location, owner);
             }
             catch (Exception ex)
@@ -53,17 +50,14 @@ namespace PetPolicyService.Controllers
             }
         }
 
-        [Route("api/owner/{ownerId}/policy/countryCode={countryCode}")]
-        public IHttpActionResult Post([FromUri] int ownerId, [FromUri] string countryCode)
+        [Route("api/owner/{ownerId}/policy")]
+        public IHttpActionResult Post([FromUri] int ownerId, [FromBody] OwnerModel ownerModel)
         {
             try
             {
-                var policy = PetPolicyFactory.Enroll(countryCode, ownerId);
+                var policy = PetPolicyFactory.Enroll(ownerModel.CountryCode, ownerId);
 
-                //new location should be /api/policy/{policyId}/pets
-                string requestUriAbsoluteUri = Request.RequestUri.AbsoluteUri;
-                var indexOf = requestUriAbsoluteUri.LastIndexOf("/", StringComparison.Ordinal);
-                string location = requestUriAbsoluteUri.Substring(0, indexOf); //remove countryCode
+                string location = Request.RequestUri.AbsoluteUri;
                 return Created(location,
                     new PolicyModel {PolicyId = policy.PolicyId, PolicyNumber = policy.PolicyNumber});
             }

@@ -39,7 +39,7 @@ namespace PetPolicyClientConsoleApp
     {
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }
-        public string CountryIso3LetterCode { get; set; }
+        public string CountryCode { get; set; }
     }
 
     public class PolicyModel

@@ -102,7 +102,7 @@ namespace PetPolicyClientConsoleApp
             OwnerModel ownerModel = new OwnerModel
             {
                 OwnerName = ownerName,
-                CountryIso3LetterCode = _countryCode
+                CountryCode = _countryCode
             };
             var response = await _client.PutAsJsonAsync(path, ownerModel);
             response.EnsureSuccessStatusCode();
@@ -115,8 +115,9 @@ namespace PetPolicyClientConsoleApp
         private static async Task<Uri> EnrollPolicyForOwner(int ownerId)
         {
             Console.WriteLine("Creating Policy for owner. Please wait.");
-            var path = new Uri(_client.BaseAddress, $"/api/owner/{ownerId}/policy/countryCode={_countryCode}");
-            var response = await _client.PostAsync(path,null);
+            OwnerModel ownerModel = new OwnerModel {CountryCode = _countryCode, OwnerId = ownerId};
+            var path = new Uri(_client.BaseAddress, $"/api/owner/{ownerId}/policy");
+            var response = await _client.PostAsJsonAsync(path, ownerModel);
             response.EnsureSuccessStatusCode();
             var policyModel = response.Content.ReadAsAsync<PolicyModel>().Result;
             _policyId = policyModel.PolicyId;
@@ -173,8 +174,7 @@ namespace PetPolicyClientConsoleApp
                         PetDateOfBirth = petDateOfBirth
                     };
 
-                    location = await AddPetToPolicy(petModel);
-                    
+                    location = await AddPetToPolicy(petModel);                    
                 }
             }
             catch (InvalidCastException ex)
@@ -236,7 +236,6 @@ namespace PetPolicyClientConsoleApp
                                   $"\n\tPetDateOfBirth: {summary.PetDateOfBirth.Date}" +
                                   $"\n\tAddToPolicyDate: {summary.AddToPolicyDate.Date}" +
                                 $"\n\tRemoveFromPolicyDate: {summary.RemoveFromPolicyDate.GetValueOrDefault()}");
-
             }
         }
 

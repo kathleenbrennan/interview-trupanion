@@ -1,0 +1,5 @@
+﻿INSERT INTO [dbo].[Country] ([CountryIso3LetterCode], [CountryName]) VALUES (N'DEU', N'Germany')
+INSERT INTO [dbo].[Country] ([CountryIso3LetterCode], [CountryName]) VALUES (N'FRA', N'France')
+INSERT INTO [dbo].[Country] ([CountryIso3LetterCode], [CountryName]) VALUES (N'USA', N'United States of America')
+INSERT INTO [dbo].[Country] ([CountryIso3LetterCode], [CountryName]) VALUES (N'GBR', N'United Kingdom')
+INSERT INTO [dbo].[Country] ([CountryIso3LetterCode], [CountryName]) VALUES (N'JPN', N'Japan')
